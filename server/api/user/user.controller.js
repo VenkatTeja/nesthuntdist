@@ -3,6 +3,7 @@
 import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import validator from 'validator';
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -75,6 +76,41 @@ export function destroy(req, res) {
     .catch(handleError(res));
 }
 
+
+/* editBuilderProfile */
+export function editBuilderProfile(req, res){
+  var body = req.body.data;
+  var key = ["name", "lastname", "regPhone", "regAddress", "cin", "website"];
+  for(var i=0;i<6;++i)
+    if(body.hasOwnProperty(key[i])){
+      if(validator.isEmpty(body[key[i]]))
+        return res.send(400,{message: key+" is empty"});
+    }
+  if(!validator.isLength(body.regPhone, {min:10,max:10}))
+    return res.send(400,{message: "Phone number 10 digits only"});
+  if(!validator.isInt(body.regPhone))
+    return res.send(400,{message: "Phone number is number only"});
+  if(!validator.isLength(body.cin, {min:21,max:21}))
+    return res.send(400,{message: "CIN 21 digits only"});
+  // Checks passed
+
+  return User.findById(req.user._id).exec()
+    .then(function(user){
+      console.log(user,22243);
+      user.name = body.name;
+      user.lastname = body.lastname;
+      user.cin = body.cin;
+      user.regPhone = body.regPhone;
+      user.regAddress = body.regAddress;
+      user.website = body.website;
+
+      user.save().then(()=>{
+        res.status(204).end();
+      })
+      .catch(validationError(res));
+    })
+    .catch(validationError(res));
+}
 /**
  * Change a users password
  */

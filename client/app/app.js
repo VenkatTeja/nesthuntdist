@@ -9,6 +9,7 @@ import 'angular-socket-io';
 
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
+import ngMaterial from 'angular-material';
 // import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -32,7 +33,7 @@ import socket from '../components/socket/socket.service';
 import './app.css';
 
 angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    uiBootstrap, _Auth, account, admin, builder, project, navbar, footer, main, constants, socket, util
+    uiBootstrap, ngMaterial, _Auth, account, admin, builder, project, navbar, footer, main, constants, socket, util
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

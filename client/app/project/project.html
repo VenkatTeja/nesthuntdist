@@ -1,37 +1,109 @@
-<section class="col-md-2"></section>
-<section class="col-md-8 padding10 borderLt box_shadow_dwn">
-	<h3 class="colorbl">Personal Information</h3>
+<div style="background:#dc0f35" class="fullW thumbs_wrap paddingLR">
+	<div id="hidden"></div>
+	<br/>
+<section class="col-md-4"></section>
+<section class="col-md-8 padding10 borderLt box_shadow_dwn bgw">
+	<h3 class="colorbl">Project</h3>
 	<hr/>
-	<md-content layout-padding>
-		<form name="projectForm">
-			<md-input-container class="md-block">
-				<label>Description</label>
-				<input md-maxlength="30" required md-no-asterisk name="description" ng-model="project.description">
-				<div ng-messages="projectForm.description.$error">
-					<div ng-message="required">This is required.</div>
-					<div ng-message="md-maxlength">The description must be less than 30 characters long.</div>
-				</div>
-			</md-input-container>
+		<form name="projectForm" ng-submit="projectCtrl.manageProject(projectCtrl.project)">
 
+			
 			<div layout="row">
 				<md-input-container flex="50">
-					<label>Client Name</label>
-					<input required name="clientName" ng-model="project.clientName">
-					<div ng-messages="projectForm.clientName.$error">
+					<label>Project Name</label>
+					<input required name="name" ng-model="projectCtrl.project.name">
+					<div ng-messages="projectForm.name.$error">
 						<div ng-message="required">This is required.</div>
 					</div>
 				</md-input-container>
-
 				<md-input-container flex="50">
-					<label>Project Type</label>
-					<md-select name="type" ng-model="project.type" required>
-						<md-option value="app">Application</md-option>
-						<md-option value="web">Website</md-option>
+					<label>Project Status</label>
+					<md-select name="type" ng-model="projectCtrl.project.status" required md-no-asterisk="false">
+						<md-option value="1">Ongoing</md-option>
+						<md-option value="2">Upcoming</md-option>
+						<md-option value="0">Completed</md-option>
 					</md-select>
 				</md-input-container>
 			</div>
+			<div class="fullW thumbs_wrap">
+				<label class="floatL fullW thumbs_wrap">Choose one</label>
+				<md-radio-group ng-model="projectCtrl.project.type">
+			      	<md-radio-button value="1" class="md-primary col-sm-4">Land</md-radio-button>
+			      	<md-radio-button value="2" class="col-sm-4"> Flat </md-radio-button>
+			      	<md-radio-button value="3" class="col-sm-4">Villa</md-radio-button>
+			    </md-radio-group>
+			</div>
+			<hr/>
 
-			<md-input-container class="md-block">
+				<label>Rate/Sq.Feet</label>
+			<div layout="row">
+				<md-input-container flex="33">
+					<label>Base Price</label>
+					<input required name="base" ng-model="projectCtrl.project.type.base">
+					<div ng-messages="projectForm.base.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
+				</md-input-container>
+				<md-input-container flex="33">
+					<label>Development Charges</label>
+					<input required name="devCharges" ng-model="projectCtrl.project.type.devCharges">
+					<div ng-messages="projectForm.devCharges.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
+				</md-input-container>
+				<md-input-container flex="33">
+					<label>Other Charges</label>
+					<input required name="others" ng-model="projectCtrl.project.type.others">
+					<div ng-messages="projectForm.others.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
+				</md-input-container>
+			</div>
+			<div class="fullW thumbs_wrap">
+				<md-input-container class="md-block" flex-gt-sm ng-if="projectCtrl.project.type==1">
+		            <label>Layout Number</label>
+		            <input name="layoutNo" ng-model="projectCtrl.project.layoutNo" required>
+
+		            <div ng-messages="projectForm.layoutNo.$error" role="alert" multiple>
+		              <div ng-message="required" class="my-message">Layout number is compulsory</div>
+		            </div>
+          		</md-input-container>
+          		<div layout="row" ng-if="projectCtrl.project.type==2">
+					<md-input-container flex="50">
+						<label>Number of Units/Tower</label>
+						<input required name="upt" ng-model="projectCtrl.project.type.upt">
+						<div ng-messages="projectForm.upt.$error">
+							<div ng-message="required">This is required.</div>
+						</div>
+					</md-input-container>
+					<md-input-container flex="50">
+						<label>Percent UDS</label>
+						<input required name="percentUDS" ng-model="projectCtrl.project.type.percentUDS">
+						<div ng-messages="projectForm.percentUDS.$error">
+							<div ng-message="required">This is required.</div>
+						</div>
+					</md-input-container>
+				</div>
+				<md-input-container flex="50" ng-if="projectCtrl.project.type==3">
+					<label>Villa Type</label>
+					<md-select name="type" ng-model="projectCtrl.project.status" required md-no-asterisk="false">
+						<md-option value="1">Land + Building</md-option>
+						<md-option value="2">Building + UDS</md-option>
+					</md-select>
+				</md-input-container>
+			</div>
+			<md-input-container class="md-block fullW thumbs_wrap">
+				<label>Description</label>
+				<input md-maxlength="100" required md-no-asterisk name="description" ng-model="projectCtrl.project.description">
+				<div ng-messages="projectForm.description.$error">
+					<div ng-message="required">This is required.</div>
+					<div ng-message="md-maxlength">The description must be less than 100 characters long.</div>
+				</div>
+			</md-input-container>
+
+			
+
+			<!-- <md-input-container class="md-block">
 				<label>Client Email</label>
 					<input required type="email" name="clientEmail" ng-model="project.clientEmail" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
 
@@ -66,7 +138,7 @@
 						doubt even Bill Clinton could afford that.
 					</div>
 				</div>
-			</md-input-container>
+			</md-input-container> -->
 
 			<div>
 				<md-button type="submit">Submit</md-button>
@@ -76,6 +148,5 @@
 				Make sure to include <a href="https://docs.angularjs.org/api/ngMessages" target="_blank">ngMessages</a> module when using ng-message markup.
 			</p>
 		</form>
-	</md-content>
 </section>
-<section class="col-md-2"></section>
+</div>

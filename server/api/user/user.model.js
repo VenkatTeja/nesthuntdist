@@ -8,7 +8,7 @@ const authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
   name: String,
-  surname: String,
+  lastname: String,
   username: {
     type: String,
     lowercase: true,
@@ -49,11 +49,11 @@ var UserSchema = new Schema({
   salt: String,
 
   // Other details
-  cinno: Number,
+  cin: String,
   regAddress: String,
   regPhone: Number,
   website: String,
-  type: String, // Builder/Buyer
+  // type: String, // Builder/Buyer
 
   // For builder
   projects: [{type:Schema.Types.ObjectId, ref:"Project"}],

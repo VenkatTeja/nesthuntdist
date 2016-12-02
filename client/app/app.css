@@ -41,7 +41,7 @@
   padding: 0.2em 0;
 }
 
-
+@import '../bower_components/angular-material/angular-material.min.css';
 /* Component styles are injected through gulp */
 /* inject:css */
 @import 'admin/admin.css';
