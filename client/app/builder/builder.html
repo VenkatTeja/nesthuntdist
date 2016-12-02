@@ -1,0 +1,76 @@
+<section class="col-md-2"></section>
+<section class="col-md-8 padding10 borderLt box_shadow_dwn">
+	<h3 class="colorbl">Personal Information</h3>
+	<hr/>
+	<md-content layout-padding>
+		<form name="projectForm">
+			<div layout="row">
+				<md-input-container flex="50">
+					<label>Client Name</label>
+					<input required name="clientName" ng-model="project.clientName">
+					<div ng-messages="projectForm.clientName.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
+				</md-input-container>
+
+				<md-input-container flex="50">
+					<label>Project Type</label>
+					<md-select name="type" ng-model="project.type" required>
+						<md-option value="app">Application</md-option>
+						<md-option value="web">Website</md-option>
+					</md-select>
+				</md-input-container>
+			</div>
+			<div layout="row">
+				<md-input-container class="md-block" flex-gt-sm>
+		          	<label>Social Security Number</label>
+		          	<input name="social" ng-model="user.social" ng-pattern="/^[0-9]{3}-[0-9]{2}-[0-9]{4}$/" />
+
+		          	<div class="hint" ng-if="showHints">###-##-####</div>
+
+		          	<div ng-messages="userForm.social.$error" ng-if="!showHints">
+		            	<div ng-message="pattern">###-##-#### - Please enter a valid SSN.</div>
+		          	</div>
+		        </md-input-container>
+
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Phone Number</label>
+					<input name="phone" ng-model="user.phone" ng-pattern="/^[(][0-9]{3}[)] [0-9]{3}-[0-9]{4}$/" />
+
+					<div class="hint" ng-show="showHints">(###) ###-####</div>
+
+					<div ng-messages="userForm.phone.$error" ng-hide="showHints">
+						<div ng-message="pattern">(###) ###-#### - Please enter a valid phone number.</div>
+					</div>
+				</md-input-container>
+			</div>
+			
+
+			<md-input-container class="md-block">
+				<label>Description</label>
+				<input md-maxlength="30" required md-no-asterisk name="description" ng-model="project.description">
+				<div ng-messages="projectForm.description.$error">
+					<div ng-message="required">This is required.</div>
+					<div ng-message="md-maxlength">The description must be less than 30 characters long.</div>
+				</div>
+			</md-input-container>
+
+			<md-input-container flex="100">
+				<label>Client Name</label>
+				<input required name="clientName" ng-model="project.clientName">
+				<div ng-messages="projectForm.clientName.$error">
+					<div ng-message="required">This is required.</div>
+				</div>
+			</md-input-container>
+
+			<div>
+				<md-button type="submit">Submit</md-button>
+			</div>
+
+			<p style="font-size:.8em; width: 100%; text-align: center;">
+				Make sure to include <a href="https://docs.angularjs.org/api/ngMessages" target="_blank">ngMessages</a> module when using ng-message markup.
+			</p>
+		</form>
+	</md-content>
+</section>
+<section class="col-md-2"></section>
