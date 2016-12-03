@@ -15,13 +15,15 @@ export default class SignupController {
 
     if(form.$valid) {
       return this.Auth.createUser({
-        name: this.user.name,
+        username: this.user.username,
         email: this.user.email,
-        password: this.user.password
+        password: this.user.password,
+        role: this.user.role
       })
-        .then(() => {
+        .then((user,user2) => {
           // Account created, redirect to home
-          this.$state.go('main');
+          console.log(user, user2);
+          this.$state.go('profile',{'id':user._id});
         })
         .catch(err => {
           err = err.data;

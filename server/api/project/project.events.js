@@ -5,7 +5,8 @@
 'use strict';
 
 import {EventEmitter} from 'events';
-import Project from './project.model';
+import ProjectModel from './project.model';
+var Project = ProjectModel.Project;
 var ProjectEvents = new EventEmitter();
 
 // Set max event listeners (0 == unlimited)

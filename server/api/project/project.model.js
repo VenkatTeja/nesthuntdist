@@ -21,7 +21,7 @@ var ProjectSchema = new Schema({
 
 });
 
-export default mongoose.model('Project', ProjectSchema);
+var Project = mongoose.model('Project', ProjectSchema);
 
 var ProjectTypeSchema = new mongoose.Schema({
   project: {type:Schema.Types.ObjectId, ref:"Project"},
@@ -43,4 +43,6 @@ var ProjectTypeSchema = new mongoose.Schema({
 
 });
 
-mongoose.model('ProjectType', ProjectTypeSchema);
+var ProjectType = mongoose.model('ProjectType', ProjectTypeSchema);
+
+export default {Project: Project, ProjectType: ProjectType};

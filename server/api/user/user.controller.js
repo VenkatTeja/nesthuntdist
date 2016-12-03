@@ -35,15 +35,18 @@ export function index(req, res) {
  * Creates a new user
  */
 export function create(req, res) {
+  console.log(req.body);
   var newUser = new User(req.body);
   newUser.provider = 'local';
-  newUser.role = 'user';
+
+  if(newUser.role=='admin')
+    return res.send(400,{message:"Bad Request"});
   newUser.save()
     .then(function(user) {
       var token = jwt.sign({ _id: user._id }, config.secrets.session, {
         expiresIn: 60 * 60 * 5
       });
-      res.json({ token });
+      res.json({ token:token, _id:user._id });
     })
     .catch(validationError(res));
 }

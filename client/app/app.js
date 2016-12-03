@@ -10,6 +10,8 @@ import 'angular-socket-io';
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
 import ngMaterial from 'angular-material';
+import ngMap from 'ngmap';
+
 // import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -24,7 +26,7 @@ import admin from './admin';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
-import builder from './builder/builder.component';
+import profile from './profile/profile.component';
 import project from './project/project.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
@@ -33,7 +35,7 @@ import socket from '../components/socket/socket.service';
 import './app.css';
 
 angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    uiBootstrap, ngMaterial, _Auth, account, admin, builder, project, navbar, footer, main, constants, socket, util
+    uiBootstrap, ngMaterial, ngMap, _Auth, account, admin, profile, project, navbar, footer, main, constants, socket, util
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

@@ -169,6 +169,9 @@ color: #666;
     align-items: center;
     text-align: center;
 }
+.centric{
+  text-align: center;
+}
 
 /*.valignIn{
  display: inline-block;

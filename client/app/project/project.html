@@ -1,33 +1,96 @@
-<div style="background:#dc0f35" class="fullW thumbs_wrap paddingLR">
+<div style="background:url(http://gulshanhomz.com/img/bellina/7.jpg)" class="fullW thumbs_wrap paddingLR">
 	<div id="hidden"></div>
-	<br/>
-<section class="col-md-4"></section>
-<section class="col-md-8 padding10 borderLt box_shadow_dwn bgw">
-	<h3 class="colorbl">Project</h3>
-	<hr/>
-		<form name="projectForm" ng-submit="projectCtrl.manageProject(projectCtrl.project)">
 
-			
+	<br/>
+<section class="col-md-4 thumbs_wrap">
+	<div class="fullW bgw box_shadow_dwn borderLt padding10" ng-repeat="project in projectCtrl.myProjects" style="margin-bottom:10px">{{project.name}}<br/>{{project.type.type}}</div>
+</section>
+<section class="thumbs_wrap col-md-8">
+
+	<form name="projectForm" ng-submit="projectCtrl.manageProject(projectCtrl.project)">
+		<div class="fullW padding10 borderLt box_shadow_dwn bgw thumbs_wrap" style="margin-bottom:20px">
+			<h3 class="colorbl">Project</h3>
+			<hr/>			
 			<div layout="row">
-				<md-input-container flex="50">
+				<md-input-container flex="100">
 					<label>Project Name</label>
 					<input required name="name" ng-model="projectCtrl.project.name">
 					<div ng-messages="projectForm.name.$error">
 						<div ng-message="required">This is required.</div>
 					</div>
 				</md-input-container>
-				<md-input-container flex="50">
-					<label>Project Status</label>
-					<md-select name="type" ng-model="projectCtrl.project.status" required md-no-asterisk="false">
-						<md-option value="1">Ongoing</md-option>
-						<md-option value="2">Upcoming</md-option>
-						<md-option value="0">Completed</md-option>
-					</md-select>
+			</div>
+
+			<md-input-container class="md-block fullW thumbs_wrap">
+				<label>Description</label>
+				<input md-maxlength="100" required md-no-asterisk name="description" ng-model="projectCtrl.project.info">
+				<div ng-messages="projectForm.description.$error">
+					<div ng-message="required">This is required.</div>
+					<div ng-message="md-maxlength">The description must be less than 100 characters long.</div>
+				</div>
+			</md-input-container>
+			<div class="fullW thumbs_wrap">
+				<label class="floatL fullW thumbs_wrap">Project Status</label>
+				<md-radio-group ng-model="projectCtrl.project.status">
+			      	<md-radio-button value="1" class="md-primary col-sm-4">Ongoing</md-radio-button>
+			      	<md-radio-button value="2" class="col-sm-4"> Upcoming </md-radio-button>
+			      	<md-radio-button value="0" class="col-sm-4">Completed</md-radio-button>
+			    </md-radio-group>
+			</div>
+			<div layout="row" layout-wrap flex class="fullW thumbs_wrap">
+            	<div class="demo-select-all-checkboxes" flex="100">
+              		<md-checkbox ng-model="projectCtrl.project.isLegalClr">
+               		Is Legal Clear?
+              		</md-checkbox>
+              		<md-checkbox ng-model="projectCtrl.project.isTechClr">
+               		Is Technical Clear?
+              		</md-checkbox>
+              		<md-checkbox ng-model="projectCtrl.project.approvals.dtcp">
+               		DTCP
+              		</md-checkbox>
+              		<md-checkbox ng-model="projectCtrl.project.approvals.cmda">
+               		CMDA
+              		</md-checkbox>
+              		<md-checkbox ng-model="projectCtrl.project.approvals.lpa">
+               		LPA
+              		</md-checkbox>
+              		<md-checkbox ng-model="projectCtrl.project.approvals.panchayath">
+               		Panchayath
+              		</md-checkbox>
+            	</div>
+          	</div>
+          	<div layout="row" class="fullW thumbs_wrap">
+				<md-input-container flex="33">
+					<label>Location</label>
+					<input required name="location" ng-model="projectCtrl.project.location">
+					<div ng-messages="projectForm.location.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
+				</md-input-container>
+				<md-input-container flex="33">
+					<label>Project email Id</label>
+					<input required name="mailId" ng-model="projectCtrl.project.mailId">
+					<div ng-messages="projectForm.mailId.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
+				</md-input-container>
+				<md-input-container flex="33">
+					<label>Offers</label>
+					<input required name="offers" ng-model="projectCtrl.project.offers">
+					<div ng-messages="projectForm.offers.$error">
+						<div ng-message="required">This is required.</div>
+					</div>
 				</md-input-container>
 			</div>
+			Images, Brocure left
+		</div>
+		<div class="fullW padding10 borderLt box_shadow_dwn bgw thumbs_wrap">
+			<h3 class="colorbl">Clearances</h3>
+			<hr/>
+
 			<div class="fullW thumbs_wrap">
 				<label class="floatL fullW thumbs_wrap">Choose one</label>
-				<md-radio-group ng-model="projectCtrl.project.type">
+				<md-radio-group ng-model="projectCtrl.project.type.type">
 			      	<md-radio-button value="1" class="md-primary col-sm-4">Land</md-radio-button>
 			      	<md-radio-button value="2" class="col-sm-4"> Flat </md-radio-button>
 			      	<md-radio-button value="3" class="col-sm-4">Villa</md-radio-button>
@@ -35,48 +98,44 @@
 			</div>
 			<hr/>
 
-				<label>Rate/Sq.Feet</label>
-			<div layout="row">
-				<md-input-container flex="33">
-					<label>Base Price</label>
-					<input required name="base" ng-model="projectCtrl.project.type.base">
-					<div ng-messages="projectForm.base.$error">
-						<div ng-message="required">This is required.</div>
-					</div>
-				</md-input-container>
-				<md-input-container flex="33">
-					<label>Development Charges</label>
-					<input required name="devCharges" ng-model="projectCtrl.project.type.devCharges">
-					<div ng-messages="projectForm.devCharges.$error">
-						<div ng-message="required">This is required.</div>
-					</div>
-				</md-input-container>
-				<md-input-container flex="33">
-					<label>Other Charges</label>
-					<input required name="others" ng-model="projectCtrl.project.type.others">
-					<div ng-messages="projectForm.others.$error">
-						<div ng-message="required">This is required.</div>
+			<md-input-container>
+				<label>Number of <span ng-if="projectCtrl.project.type==1">Plots</span><span ng-if="projectCtrl.project.type==2">Towers</span><span ng-if="projectCtrl.project.type==3">Villas</span></label>
+				<input type="number" required name="num" ng-model="projectCtrl.project.type.num" ng-change="projectCtrl.setSize(projectCtrl.project.type.num)">
+				<div ng-messages="projectForm.num.$error">
+					<div ng-message="required">This is required.</div>
+				</div>
+			</md-input-container>
+
+			
+			<div class="fullW thumbs_wrap" ng-show="projectCtrl.project.type.size.length">
+				<div class="fullW floatL"><label>Size of Each</label></div>
+				<md-input-container ng-repeat="size in projectCtrl.project.type.size track by $index" class="col-xs-2 floatL">
+					<input required name="size{{$index}}" ng-model="projectCtrl.project.type.size[$index]" placeholder="Size {{$index+1}}">
+					<div ng-messages="projectForm.size{{$index}}.$error">
+						<div ng-message="required">Required.</div>
 					</div>
 				</md-input-container>
 			</div>
+
 			<div class="fullW thumbs_wrap">
-				<md-input-container class="md-block" flex-gt-sm ng-if="projectCtrl.project.type==1">
+				<md-input-container class="md-block" flex-gt-sm ng-if="projectCtrl.project.type.type==1">
 		            <label>Layout Number</label>
-		            <input name="layoutNo" ng-model="projectCtrl.project.layoutNo" required>
+		            <input name="layoutNo" ng-model="projectCtrl.project.type.layoutNo" required>
 
 		            <div ng-messages="projectForm.layoutNo.$error" role="alert" multiple>
 		              <div ng-message="required" class="my-message">Layout number is compulsory</div>
 		            </div>
           		</md-input-container>
-          		<div layout="row" ng-if="projectCtrl.project.type==2">
-					<md-input-container flex="50">
-						<label>Number of Units/Tower</label>
-						<input required name="upt" ng-model="projectCtrl.project.type.upt">
-						<div ng-messages="projectForm.upt.$error">
-							<div ng-message="required">This is required.</div>
+				<div class="fullW" ng-if="projectCtrl.project.type.type==2">
+					<div class="fullW floatL" ng-if="projectCtrl.project.type.size"><label>No. of flats in each tower</label></div>
+					<md-input-container ng-repeat="size in projectCtrl.project.type.size track by $index" class="col-xs-2 floatL">
+						<input required name="upt{{$index}}" ng-model="projectCtrl.project.type.upt[$index]" placeholder="Tower {{$index+1}}">
+						<div ng-messages="projectForm.upt{{$index}}.$error">
+							<div ng-message="required">Required.</div>
 						</div>
 					</md-input-container>
-					<md-input-container flex="50">
+
+					<md-input-container class="fullW floatL">
 						<label>Percent UDS</label>
 						<input required name="percentUDS" ng-model="projectCtrl.project.type.percentUDS">
 						<div ng-messages="projectForm.percentUDS.$error">
@@ -84,69 +143,44 @@
 						</div>
 					</md-input-container>
 				</div>
-				<md-input-container flex="50" ng-if="projectCtrl.project.type==3">
+				<md-input-container flex="50" ng-if="projectCtrl.project.type.type==3">
 					<label>Villa Type</label>
-					<md-select name="type" ng-model="projectCtrl.project.status" required md-no-asterisk="false">
+					<md-select name="type" ng-model="projectCtrl.project.type.villaType" required md-no-asterisk="false">
 						<md-option value="1">Land + Building</md-option>
 						<md-option value="2">Building + UDS</md-option>
 					</md-select>
 				</md-input-container>
 			</div>
-			<md-input-container class="md-block fullW thumbs_wrap">
-				<label>Description</label>
-				<input md-maxlength="100" required md-no-asterisk name="description" ng-model="projectCtrl.project.description">
-				<div ng-messages="projectForm.description.$error">
-					<div ng-message="required">This is required.</div>
-					<div ng-message="md-maxlength">The description must be less than 100 characters long.</div>
-				</div>
-			</md-input-container>
 
-			
-
-			<!-- <md-input-container class="md-block">
-				<label>Client Email</label>
-					<input required type="email" name="clientEmail" ng-model="project.clientEmail" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
-
-					<div ng-messages="projectForm.clientEmail.$error" role="alert">
-						<div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
-							Your email must be between 10 and 100 characters long and look like an e-mail address.
-						</div>
+			<div class="fullW floatL"><label>Rate/Sq.Feet</label></div>
+			<div layout="row" class="fullW floatL">
+				<md-input-container flex="34">
+					<label>Base Price</label>
+					<input required type="number" name="base" ng-model="projectCtrl.project.type.rps.base">
+					<div ng-messages="projectForm.base.$error">
+						<div ng-message="required">This is required.</div>
 					</div>
-			</md-input-container>
-
-			<md-input-container class="md-block">
-				<label>Hourly Rate (USD)</label>
-				<input required type="number" step="any" name="rate" ng-model="project.rate" min="800" max="4999" ng-pattern="/^1234$/" />
-
-				<div ng-messages="projectForm.rate.$error" multiple md-auto-hide="false">
-					<div ng-message="required">
-						You've got to charge something! You can't just <b>give away</b> a Missile Defense
-						System.
+				</md-input-container>
+				<md-input-container flex="33">
+					<label>Development Charges</label>
+					<input required type="number" name="devCharges" ng-model="projectCtrl.project.type.rps.devCharges">
+					<div ng-messages="projectForm.devCharges.$error">
+						<div ng-message="required">This is required.</div>
 					</div>
-
-					<div ng-message="min">
-						You should charge at least $800 an hour. This job is a big deal... if you mess up,
-						everyone dies!
+				</md-input-container>
+				<md-input-container flex="33">
+					<label>Other Charges</label>
+					<input required type="number" name="others" ng-model="projectCtrl.project.type.rps.others">
+					<div ng-messages="projectForm.others.$error">
+						<div ng-message="required">This is required.</div>
 					</div>
-
-					<div ng-message="pattern">
-						You should charge exactly $1,234.
-					</div>
-
-					<div ng-message="max">
-						{{projectForm.rate.$viewValue | currency:"$":0}} an hour? That's a little ridiculous. I
-						doubt even Bill Clinton could afford that.
-					</div>
-				</div>
-			</md-input-container> -->
+				</md-input-container>
+			</div>
 
 			<div>
 				<md-button type="submit">Submit</md-button>
 			</div>
-
-			<p style="font-size:.8em; width: 100%; text-align: center;">
-				Make sure to include <a href="https://docs.angularjs.org/api/ngMessages" target="_blank">ngMessages</a> module when using ng-message markup.
-			</p>
-		</form>
+		</div>
+	</form>
 </section>
 </div>

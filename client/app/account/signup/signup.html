@@ -1,19 +1,19 @@
 <div class="container">
+  <div id="hidden"></div>
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
       <h1>Sign up</h1>
-    </div>
-    <div class="col-sm-12">
       <form class="form" name="form" ng-submit="vm.register(form)" novalidate>
 
-        <div class="form-group" ng-class="{ 'has-success': form.name.$valid && vm.submitted,
-                                            'has-error': form.name.$invalid && vm.submitted }">
-          <label>Name</label>
+        <div class="form-group" ng-class="{ 'has-success': form.username.$valid && vm.submitted,
+                                            'has-error': form.username.$invalid && vm.submitted }">
+          <label>Username</label>
 
-          <input type="text" name="name" class="form-control" ng-model="vm.user.name"
+          <input type="text" name="username" class="form-control" ng-model="vm.user.username"
                  required/>
-          <p class="help-block" ng-show="form.name.$error.required && vm.submitted">
-            A name is required
+          <p class="help-block" ng-show="form.username.$error.required && vm.submitted">
+            A Unique username is required
           </p>
         </div>
 
@@ -63,6 +63,13 @@
             Passwords must match.
           </p>
         </div>
+        <div class="fullW thumbs_wrap">
+          <label class="floatL fullW thumbs_wrap">Choose One</label>
+          <md-radio-group ng-model="vm.user.role" name="role" required>
+                <md-radio-button value="builder" class="md-primary col-sm-4">Builder</md-radio-button>
+                <md-radio-button value="buyer" class="col-sm-4"> Buyer </md-radio-button>
+            </md-radio-group>
+      </div>
 
         <div>
           <button class="btn btn-inverse btn-lg btn-register" type="submit">
@@ -75,7 +82,7 @@
 
         <hr/>
         <div class="row">
-          <div class="col-sm-4 col-md-3">
+          <div class="fullW">
             <oauth-buttons classes="btn-block"></oauth-buttons>
           </div>
         </div>

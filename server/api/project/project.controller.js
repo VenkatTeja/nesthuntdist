@@ -65,14 +65,21 @@ function handleError(res, statusCode) {
 
 // Gets a list of Projects
 export function index(req, res) {
-  return Project.find().exec()
+  return Project.Project.find().exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Gets a list of My Projects
+export function myProjects(req, res) {
+  return Project.Project.find({builder:req.params.id}).populate('type').exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Gets a single Project from the DB
 export function show(req, res) {
-  return Project.findById(req.params.id).exec()
+  return Project.Project.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -80,9 +87,22 @@ export function show(req, res) {
 
 // Creates a new Project in the DB
 export function create(req, res) {
-  return Project.create(req.body)
-    .then(respondWithResult(res, 201))
+  var body = req.body.data;
+  var total = body.type.rps.base + body.type.rps.devCharges + body.type.rps.others;
+  body.type.rps.total = total;
+  return Project.ProjectType.create(body.type)
+    .then(function(projectType){
+      console.log(req.user._id);
+      body.type = projectType._id;
+      body.builder = req.user._id;
+      Project.Project.create(body)
+        .then(respondWithResult(res, 201))
+        .catch(handleError(res));
+    })
     .catch(handleError(res));
+  // return Project.Project.create(req.body)
+  //   .then(respondWithResult(res, 201))
+  //   .catch(handleError(res));
 }
 
 // Upserts the given Project in the DB at the specified ID
@@ -90,7 +110,7 @@ export function upsert(req, res) {
   if(req.body._id) {
     delete req.body._id;
   }
-  return Project.findOneAndUpdate(req.params.id, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
+  return Project.Project.findOneAndUpdate(req.params.id, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
 
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -101,7 +121,7 @@ export function patch(req, res) {
   if(req.body._id) {
     delete req.body._id;
   }
-  return Project.findById(req.params.id).exec()
+  return Project.Project.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(patchUpdates(req.body))
     .then(respondWithResult(res))
@@ -110,7 +130,7 @@ export function patch(req, res) {
 
 // Deletes a Project from the DB
 export function destroy(req, res) {
-  return Project.findById(req.params.id).exec()
+  return Project.Project.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
