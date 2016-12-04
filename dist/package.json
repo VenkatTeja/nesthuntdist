@@ -1,6 +1,6 @@
 {
   "name": "nest-hunt",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "server/index.js",
   "dependencies": {
     "angular": "~1.5.5",
@@ -137,13 +137,12 @@
     "supertest": "^1.1.0"
   },
   "engines": {
-    "node": "^6.2.2",
-    "npm": "^3.9.5"
+    "node": "6.7.0"
   },
   "scripts": {
     "test": "gulp test",
     "update-webdriver": "node node_modules/protractor/bin/webdriver-manager update",
-    "start": "node server"
+    "start": "NODE_ENV=production node server/index.js"
   },
   "private": true
 }

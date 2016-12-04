@@ -3,25 +3,32 @@
 
 <div style="background:black" class="fullW thumbs_wrap">
   
-  <div id="hidden"></div>
-  <div map-lazy-load="https://maps.google.com/maps/api/js"
-    map-lazy-load-params="{{$ctrl.googleMapsUrl}}" class="fullW" >
+  <section style="height:100vh;min-height:500px;background-image:url(http://gulshanhomz.com/img/bellina/7.jpg);opacity:0.7;margin-bottom:-100vh;position:fixed" class="fullW thumbs_wrap bgImage"></section>
+  <section class="fullW thumbs_wrap" style="height:100vh;min-height:500px">
+    <div id="hidden"></div>
+
+    <div map-lazy-load="https://maps.google.com/maps/api/js"
+    map-lazy-load-params="{{$ctrl.googleMapsUrl}}" class="fullW thumbs_wrap">
       <ng-map center='current-position'
       geo-fallback-center="[40.74, -74.18]"
-      geo-callback="vm.callbackFunc('you')"
-       style="height:60vh"></ng-map>
+      geo-callback="$ctrl.getCenter()"
+       style="height:60vh">
+       <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true"></marker>
+     </ng-map>
     </div>
-  <section style="height:100vh;min-height:500px;background-image:url(http://gulshanhomz.com/img/bellina/7.jpg);opacity:0.7;margin-bottom:-100vh" class="fullW thumbs_wrap bgImage"></section>
-  <section style="height:100vh;min-height:500px;" class="fullW thumbs_wrap">
-    
-    <div class="fullW thumbs_wrap centric colorw">
-      <h1>Nest Hunt</h1>
-      <p>Buy your next home with us</p>
+    <div class="fullW thumbs_wrap centric">
+        <input places-auto-complete
+      ng-model="$ctrl.address"
+      component-restrictions="{country:'in'}"
+      types="{{$ctrl.types}}"
+      on-place-changed="$ctrl.placeChanged()" style="padding:5px;width:100%;font-size:20px" />
+        <div class="fullW thumbs_wrap centric colorw">
+          <h1>Nest Hunt</h1>
+          <p>Buy your next home with us</p>
+        </div>
     </div>
-
-
-
-
+  </section>
+  <section style="height:100vh;min-height:500px;" class="fullW thumbs_wrap bglg">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
       <div class="col-md-4 padding10" ng-repeat="project in $ctrl.projects">

@@ -1,30 +1,27 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import routing from './main.routes';
-
+var global = {};
 export class MainController {
 
+  
   /*@ngInject*/
   constructor($http, $scope, socket, NgMap) {
+    global = this;
     this.$http = $http;
     this.socket = socket;
+    this.coordinates = '';
+    this.message = 'You can not hide. :)';
 
+    this.types = "['establishment']";
+    
 
-    var vm = this;
-    vm.message = 'You can not hide. :)';
-    NgMap.getMap().then(function(map) {
-      vm.map = map;
+    NgMap.getMap().then(map => {
+      this.map = map;
+      this.coordinates = this.map.getCenter().lat()+','+this.map.getCenter().lng();
     });
-    vm.callbackFunc = function(param) {
-      console.log('I know where '+ param +' are. ' + vm.message);
-      console.log('You are at' + vm.map.getCenter());
-    };
 
     this.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkRdm99u8ZxzbilGEK7FHOxfwd4uvg0II";
-
-    // $scope.$on('$destroy', function() {
-    //   socket.unsyncUpdates('thing');
-    // });
   }
 
   $onInit() {
@@ -33,6 +30,17 @@ export class MainController {
         this.projects = response.data;
         // this.socket.syncUpdates('thing', this.awesomeThings);
       });
+  }
+
+  getCenter (){
+    console.log('You are at');
+  }
+  placeChanged() {
+    this.place = this.getPlace();
+    global.coordinates= this.place.geometry.location.lat()+','+this.place.geometry.location.lng();
+    console.log('location', global.coordinates);
+    global.map.setCenter(this.place.geometry.location);
+    this.coordinates = global.coordinates;
   }
 
   addThing() {
