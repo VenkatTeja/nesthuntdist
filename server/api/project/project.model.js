@@ -13,7 +13,7 @@ var ProjectSchema = new Schema({
   approvals:{dtcp: Boolean, cmda: Boolean, lpa: Boolean, panchayath: Boolean},
   imagesInt : [String],
   imagesExt: [String],
-  location: String,
+  location: {lat:String,lng:String},
   brochure: String,
   offers: {pic:String, text:String},
   mailId: String,
