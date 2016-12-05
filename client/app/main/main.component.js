@@ -35,6 +35,11 @@ export class MainController {
   getCenter (){
     console.log('You are at');
   }
+  getCurrentLocation(event){
+    global.coordinates= event.latLng.lat()+','+event.latLng.lng();
+    console.log('location', global.coordinates);
+    this.coordinates = global.coordinates;
+  }
   placeChanged() {
     this.place = this.getPlace();
     global.coordinates= this.place.geometry.location.lat()+','+this.place.geometry.location.lng();

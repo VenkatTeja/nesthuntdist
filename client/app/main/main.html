@@ -13,7 +13,7 @@
       geo-fallback-center="[40.74, -74.18]"
       geo-callback="$ctrl.getCenter()"
        style="height:60vh">
-       <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true"></marker>
+       <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="$ctrl.getCurrentLocation()"></marker>
      </ng-map>
     </div>
     <div class="fullW thumbs_wrap centric">
@@ -23,7 +23,7 @@
       types="{{$ctrl.types}}"
       on-place-changed="$ctrl.placeChanged()" style="padding:5px;width:100%;font-size:20px" />
         <div class="fullW thumbs_wrap centric colorw">
-          <h1>Nest Hunt</h1>
+          <h1>Nest Hunt{{$ctrl.coordinates}}</h1>
           <p>Buy your next home with us</p>
         </div>
     </div>
