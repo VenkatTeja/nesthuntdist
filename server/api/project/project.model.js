@@ -8,12 +8,12 @@ var ProjectSchema = new Schema({
   info: String,
   status: Number, // Status : 0 - completed, 1 - ongoing, 2-upcoming
   type: {type:Schema.Types.ObjectId, ref:"ProjectType"}, // Land/Flat/Villa
-  isLegalClr: Boolean, // Is Legal Cleared?
-  isTechClr: Boolean, // Is Technical Cleared?
+  LegalBy: String, // Is Legal Cleared?
+  techBy: String, // Is Technical Cleared?
   approvals:{dtcp: Boolean, cmda: Boolean, lpa: Boolean, panchayath: Boolean},
   imagesInt : [String],
   imagesExt: [String],
-  location: {lat:String,lng:String},
+  location: {lat:String,lng:String, name: String},
   brochure: String,
   offers: {pic:String, text:String},
   mailId: String,

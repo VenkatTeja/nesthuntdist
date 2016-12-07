@@ -12,6 +12,7 @@
 
 import jsonpatch from 'fast-json-patch';
 import Project from './project.model';
+import AWS from 'aws-sdk';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -126,6 +127,43 @@ export function patch(req, res) {
     .then(patchUpdates(req.body))
     .then(respondWithResult(res))
     .catch(handleError(res));
+}
+
+export function uploadPic(req, res) {
+  //console.log(req.body,55555555);
+  AWS.config.update({accessKeyId: process.env.CELLAR_ADDON_KEY_ID, secretAccessKey: process.env.CELLAR_ADDON_KEY_SECRET});
+  var ep = new AWS.Endpoint(process.env.CELLAR_ADDON_HOST);
+  var s3 = new AWS.S3({
+   endpoint: ep, 
+   signatureVersion: 'v2'
+  });
+
+  var body = fs.createReadStream(req.files.file.path);
+  fs.rename(req.files.file.path,req.files.file.path+'.jpg',function(err){
+    if ( err )console.log('ERROR: ' + err);
+
+    // var params = {
+    //   Bucket: 'vedikdist', /* required */
+    //   ACL: 'public-read',
+    // };
+    // s3.createBucket(params, function(err, data) {
+    //   if (err) console.log(err, err.stack); // an error occurred
+    //   else     console.log(data);           // successful response
+    
+
+
+      body.path = body.path+'.jpg';
+      var params = {Bucket: process.env.BUCKET, Key: req.body.key, Body: body, ACL: 'public-read'};
+      var request = s3.putObject(params).on('httpUploadProgress', function(progress) {
+        console.log(progress);
+      }).send(function(err,data){
+        console.log(err);
+        if (err) return handleError(res, {message:"Unable to upload image. Try again & Check your internet!"});
+        return res.send(200);
+      }); 
+    // });
+  }) 
+
 }
 
 // Deletes a Project from the DB

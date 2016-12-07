@@ -4,6 +4,13 @@
  * Bootstrap Fonts
  */
 
+body {
+  margin: 0;
+  background: rgba(0,0,0,0);
+  font-family: 'roboto'; 
+  letter-spacing: 0px
+}
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('/assets/fonts/bootstrap/glyphicons-halflings-regular.eot');

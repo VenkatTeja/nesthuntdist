@@ -38,9 +38,9 @@
 
 			<md-input-container class="md-block" flex-gt-sm>
 				<label>Registered Phone Number</label>
-				<input name="regPhone" ng-model="profile.user.regPhone" ng-pattern="/^[0-9]{10}$/" />
+				<input name="phone" ng-model="profile.user.phone" ng-pattern="/^[0-9]{10}$/" />
 
-				<div ng-messages="userForm.regPhone.$error">
+				<div ng-messages="userForm.phone.$error">
 					<div ng-message="pattern">Please enter a valid phone number (e.g. 932345221x).</div>
 				</div>
 			</md-input-container>
@@ -49,8 +49,8 @@
 
 		<md-input-container class="md-block">
 			<label>Registered Address</label>
-			<input md-maxlength="100" required name="regAddress" ng-model="profile.user.regAddress">
-			<div ng-messages="userForm.regAddress.$error">
+			<input md-maxlength="100" required name="address" ng-model="profile.user.address">
+			<div ng-messages="userForm.address.$error">
 				<div ng-message="required">This is required.</div>
 				<div ng-message="md-maxlength">The description must be less than 100 characters long.</div>
 			</div>

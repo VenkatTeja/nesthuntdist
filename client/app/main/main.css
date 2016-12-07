@@ -1,3 +1,29 @@
+#buyerForm md-input-container{
+  padding: 0px 10px
+}
+#buyerForm input{
+  height: 50px;
+  border: 2px solid grey;
+  color: white;
+  padding: 0px 5px
+}
+#buyerForm md-input-container label:not(.md-container-ignore){
+  position: absolute;
+  bottom: 84%;
+  left: 15px;
+  color: white;
+  right: auto;
+}
+#buyerForm label{
+  z-index: 10;
+}
+#buyerForm div[ng-message]{
+  color: #ddd
+}
+#buyerForm div[ng-message-exp]{
+  color: #ddd
+}
+
 #map {
   height: 400px;
   width: 100%;

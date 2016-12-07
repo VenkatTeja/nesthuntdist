@@ -35,7 +35,7 @@ import socket from '../components/socket/socket.service';
 import './app.css';
 
 angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    uiBootstrap, ngMaterial, ngMap, _Auth, account, admin, profile, project, navbar, footer, main, constants, socket, util
+    uiBootstrap, ngMaterial, ngMap, _Auth, account, admin, profile, navbar, footer, main, project, constants, socket, util
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

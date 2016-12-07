@@ -5,30 +5,96 @@
   
   <section style="height:100vh;min-height:500px;background-image:url(http://gulshanhomz.com/img/bellina/7.jpg);opacity:0.7;margin-bottom:-100vh;position:fixed" class="fullW thumbs_wrap bgImage"></section>
   <section class="fullW thumbs_wrap" style="height:100vh;min-height:500px">
-    <div id="hidden"></div>
 
-    <div map-lazy-load="https://maps.google.com/maps/api/js"
-    map-lazy-load-params="{{$ctrl.googleMapsUrl}}" class="fullW thumbs_wrap">
-      <ng-map center='current-position'
-      geo-fallback-center="[40.74, -74.18]"
-      geo-callback="$ctrl.getCenter()"
-       style="height:60vh">
-       <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="$ctrl.getCurrentLocation()"></marker>
-     </ng-map>
-    </div>
-    <div class="fullW thumbs_wrap centric">
-        <input places-auto-complete
-      ng-model="$ctrl.address"
-      component-restrictions="{country:'in'}"
-      types="{{$ctrl.types}}"
-      on-place-changed="$ctrl.placeChanged()" style="padding:5px;width:100%;font-size:20px" />
-        <div class="fullW thumbs_wrap centric colorw">
-          <h1>Nest Hunt{{$ctrl.coordinates}}</h1>
-          <p>Buy your next home with us</p>
+    <div class="fullW thumbs_wrap">
+      <div class="fullW thumbs_wrap" style="min-height:100vh">
+        <div map-lazy-load="https://maps.google.com/maps/api/js"
+        map-lazy-load-params="{{$ctrl.googleMapsUrl}}" class="fullW thumbs_wrap">
+          <ng-map center='current-position' geo-fallback-center="[40.74, -74.18]" style="height:100vh">
+            <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="$ctrl.getCurrentLocation()"></marker>
+            <custom-marker ng-repeat="project in $ctrl.projects" position="{{project.location.lat}},{{project.location.lng}}">
+              <img src="http://images.all-free-download.com/images/graphiclarge/green_house_icon_vector_280701.jpg" id="dpsm" style="position:absolute;margin-left:-10px"/>
+            </custom-marker>
+          </ng-map>
         </div>
+
+        <input places-auto-complete ng-model="$ctrl.address" component-restrictions="{country:'in'}" types="{{$ctrl.types}}" on-place-changed="$ctrl.placeChanged()" style="padding:5px;width:100%;font-size:20px;position:absolute;bottom:0px;left:0px"/>
+      </div>
+      <div style="position:absolute;min-height:100vh;background:rgba(0,0,0,0.6)" class="fullW" ng-hide="$ctrl.Auth.isLoggedInSync()">
+        <div id="hidden"></div>
+        <h2 class="centric colorw">Welcome to Nest Hunt</h2>
+        <p class="centric colorw">Give us the following details and we will show the best properties you are eligible for</p>
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <form name="userForm" id="buyerForm" ng-submit="$ctrl.register(userForm, $ctrl.user)">
+            <div layout="row">
+              <md-input-container flex="50">
+                <label>FirstName</label>
+                <input required type="text" name="name" ng-model="$ctrl.user.name">
+                <div ng-messages="userForm.name.$error">
+                  <div ng-message="required">This is required.</div>
+                </div>
+              </md-input-container>
+              <md-input-container flex="50">
+                <label>Phone Number</label>
+                <input required type="number" name="phone" ng-model="$ctrl.user.phone" min-length="10" max-length="10" ng-pattern="/^[0-9]{10}$/">
+                <div ng-messages="userForm.phone.$error">
+                  <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">This is required and should look like a phone number - ##########</div>
+                </div>
+              </md-input-container>
+            </div>
+            <div layout="row">
+              <md-input-container flex="50">
+                <label>Gross Income</label>
+                <input required type="number" name="income" ng-model="$ctrl.user.income" min="0">
+                <div ng-messages="userForm.income.$error">
+                  <div ng-message-exp="['required','min']">This is required.</div>
+                </div>
+              </md-input-container>
+              <md-input-container flex="50">
+                <label>Current EMI</label>
+                <input required type="number" name="currentEmi" ng-model="$ctrl.user.currentEmi" min="0"
+               max="$ctrl.user.income">
+                <div ng-messages="userForm.currentEmi.$error">
+                  <div ng-message-exp="['required', 'min', 'max']">This is required and should be between 0 and max income</div>
+                </div>
+              </md-input-container>
+            </div>
+            <div layout="row">
+              <md-input-container flex="50">
+                <label>Email</label>
+                <input required type="email" name="email" ng-model="$ctrl.user.email" ng-pattern="/^.+@.+\..+$/" minlength="10" maxlength="100">
+                <div ng-messages="userForm.email.$error">
+                  <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                    Your email must be between 10 and 100 characters long and look like an e-mail address.
+                  </div>
+                </div>
+              </md-input-container>
+              <md-input-container flex="50">
+                <label>Password</label>
+                <input required name="password" ng-model="$ctrl.user.password" min="6" type="password">
+                <div ng-messages="userForm.password.$error">
+                  <div ng-message="required">This is required.</div>
+                  <div ng-message="min">Minimum 6 characters</div>
+                </div>
+              </md-input-container>
+            </div>
+            <div class="fullW thumbs_wrap valignOut">
+              <md-button type="submit" ng-disabled="userForm.$invalid" class="md-raised">SignUp</md-button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </section>
   <section style="height:100vh;min-height:500px;" class="fullW thumbs_wrap bglg">
+
+    <div class="fullW thumbs_wrap centric colorbl">
+        <div class="fullW thumbs_wrap centric">
+          <h1>Nest Hunt</h1>
+          <p>Buy your next home with us</p>
+        </div>
+    </div>
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
       <div class="col-md-4 padding10" ng-repeat="project in $ctrl.projects">

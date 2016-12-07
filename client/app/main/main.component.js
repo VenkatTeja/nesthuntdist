@@ -6,22 +6,20 @@ export class MainController {
 
   
   /*@ngInject*/
-  constructor($http, $scope, socket, NgMap) {
-    global = this;
+  constructor($http, $scope, socket, NgMap, $state, Auth) {
     this.$http = $http;
     this.socket = socket;
+    this.$state = $state;
+    this.Auth = Auth;
+    // Map
+    global = this;
     this.coordinates = '';
-    this.message = 'You can not hide. :)';
-
     this.types = "['establishment']";
-    
-
     NgMap.getMap().then(map => {
       this.map = map;
       this.coordinates = this.map.getCenter().lat()+','+this.map.getCenter().lng();
     });
-
-    this.googleMapsUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkRdm99u8ZxzbilGEK7FHOxfwd4uvg0II";
+    this.googleMapsUrl = 'https://maps.google.com/maps/api/js?key=AIzaSyAkRdm99u8ZxzbilGEK7FHOxfwd4uvg0II';
   }
 
   $onInit() {
@@ -32,9 +30,6 @@ export class MainController {
       });
   }
 
-  getCenter (){
-    console.log('You are at');
-  }
   getCurrentLocation(event){
     global.coordinates= event.latLng.lat()+','+event.latLng.lng();
     console.log('location', global.coordinates);
@@ -48,17 +43,32 @@ export class MainController {
     this.coordinates = global.coordinates;
   }
 
-  addThing() {
-    if(this.newThing) {
-      this.$http.post('/api/things', {
-        name: this.newThing
-      });
-      this.newThing = '';
+  register(form, user) {
+    console.log(user);
+    if(form.$valid) {
+      
+      return this.Auth.createUser({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        role: 'buyer',
+        phone: user.phone,
+        income: user.income,
+        currentEmi: user.currentEmi
+      }).then((user) => {
+          // Account created, redirect to home
+          this.$state.reload();
+        })
+        .catch(err => {
+          err = err.data;
+          this.errors = {};
+          // Update validity of form fields that match the mongoose errors
+          angular.forEach(err.errors, (error, field) => {
+            form[field].$setValidity('mongoose', false);
+            this.errors[field] = error.message;
+          });
+        });
     }
-  }
-
-  deleteThing(thing) {
-    this.$http.delete('/api/things/' + thing._id);
   }
 }
 
