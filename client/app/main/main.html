@@ -20,10 +20,10 @@
 
         <input places-auto-complete ng-model="$ctrl.address" component-restrictions="{country:'in'}" types="{{$ctrl.types}}" on-place-changed="$ctrl.placeChanged()" style="padding:5px;width:100%;font-size:20px;position:absolute;bottom:0px;left:0px"/>
       </div>
-      <div style="position:absolute;min-height:100vh;background:rgba(0,0,0,0.6)" class="fullW" ng-hide="$ctrl.Auth.isLoggedInSync()">
+      <div style="position:absolute;min-height:100vh;background:rgba(255,255,255,0.7)" class="fullW" ng-hide="$ctrl.Auth.isLoggedInSync()">
         <div id="hidden"></div>
-        <h2 class="centric colorw">Welcome to Nest Hunt</h2>
-        <p class="centric colorw">Give us the following details and we will show the best properties you are eligible for</p>
+        <h2 class="centric colorbl">Welcome to Nest Hunt</h2>
+        <p class="centric colorbl">Give us the following details and we will show the best properties you are eligible for</p>
         <div class="col-md-2"></div>
         <div class="col-md-8">
           <form name="userForm" id="buyerForm" ng-submit="$ctrl.register(userForm, $ctrl.user)">

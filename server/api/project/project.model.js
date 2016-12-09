@@ -35,12 +35,10 @@ var ProjectTypeSchema = new mongoose.Schema({
   percentUDS: Number,
 
   // Villa
-  villaType: Number, // 1-L+B, 2-B+UDS
+  // villaType: Number, // 1-L+B, 2-B+UDS
 
-  num: Number,
+  categories: [{num: Number, size: Number, villaType:Number, totalPrice:Number}],
   rps: {base:Number, devCharges: Number, others: Number, total: Number}, // Rate per square feet
-  size: [Number]
-
 });
 
 var ProjectType = mongoose.model('ProjectType', ProjectTypeSchema);

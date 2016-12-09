@@ -35,12 +35,12 @@ export function index(req, res) {
  * Creates a new user
  */
 export function create(req, res) {
-  console.log(req.body);
   var newUser = new User(req.body);
   newUser.provider = 'local';
 
   if(newUser.role=='admin')
     return res.send(400,{message:"Bad Request"});
+  newUser.loanEstimate = ((0.3*newUser.income)-newUser.currentEmi)*120;
   newUser.save()
     .then(function(user) {
       var token = jwt.sign({ _id: user._id }, config.secrets.session, {

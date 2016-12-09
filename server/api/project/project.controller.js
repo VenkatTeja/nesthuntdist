@@ -13,6 +13,7 @@
 import jsonpatch from 'fast-json-patch';
 import Project from './project.model';
 import AWS from 'aws-sdk';
+import fs from 'fs';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -91,14 +92,28 @@ export function create(req, res) {
   var body = req.body.data;
   var total = body.type.rps.base + body.type.rps.devCharges + body.type.rps.others;
   body.type.rps.total = total;
+  var imagesInt = body.imagesInt;  
+  var imagesExt = body.imagesExt;
   return Project.ProjectType.create(body.type)
     .then(function(projectType){
-      console.log(req.user._id);
       body.type = projectType._id;
       body.builder = req.user._id;
-      Project.Project.create(body)
-        .then(respondWithResult(res, 201))
-        .catch(handleError(res));
+      var newProject = new Project.Project(body);
+
+      newProject.imagesInt = [
+        'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesInt/'+newProject._id+'_1.jpg',
+        'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesInt/'+newProject._id+'_2.jpg'
+      ];
+      newProject.imagesExt = [
+        'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesExt/'+newProject._id+'_1.jpg',
+        'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesExt/'+newProject._id+'_2.jpg'
+      ];
+      newProject.brochure = 'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/brochure/'+newProject._id+'.jpg';
+      newProject.offers.pic = 'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/offer/'+newProject._id+'.jpg';
+      
+      newProject.save()
+      .then(respondWithResult(res, 201))
+      .catch(handleError(res));
     })
     .catch(handleError(res));
   // return Project.Project.create(req.body)
@@ -119,49 +134,36 @@ export function upsert(req, res) {
 
 // Updates an existing Project in the DB
 export function patch(req, res) {
-  if(req.body._id) {
+  if(req.body.data._id) {
     delete req.body._id;
   }
   return Project.Project.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
-    .then(patchUpdates(req.body))
+    .then(patchUpdates(req.body.data))
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
-export function uploadPic(req, res) {
-  //console.log(req.body,55555555);
+export function uploadfile(req, res) {
   AWS.config.update({accessKeyId: process.env.CELLAR_ADDON_KEY_ID, secretAccessKey: process.env.CELLAR_ADDON_KEY_SECRET});
   var ep = new AWS.Endpoint(process.env.CELLAR_ADDON_HOST);
   var s3 = new AWS.S3({
    endpoint: ep, 
    signatureVersion: 'v2'
   });
-
   var body = fs.createReadStream(req.files.file.path);
   fs.rename(req.files.file.path,req.files.file.path+'.jpg',function(err){
     if ( err )console.log('ERROR: ' + err);
 
-    // var params = {
-    //   Bucket: 'vedikdist', /* required */
-    //   ACL: 'public-read',
-    // };
-    // s3.createBucket(params, function(err, data) {
-    //   if (err) console.log(err, err.stack); // an error occurred
-    //   else     console.log(data);           // successful response
-    
-
-
-      body.path = body.path+'.jpg';
-      var params = {Bucket: process.env.BUCKET, Key: req.body.key, Body: body, ACL: 'public-read'};
-      var request = s3.putObject(params).on('httpUploadProgress', function(progress) {
-        console.log(progress);
-      }).send(function(err,data){
-        console.log(err);
-        if (err) return handleError(res, {message:"Unable to upload image. Try again & Check your internet!"});
-        return res.send(200);
-      }); 
-    // });
+    body.path=body.path+'.jpg';
+    var params = {Bucket: process.env.BUCKET, Key: req.body.key, Body: body, ACL: 'public-read'};
+    var request = s3.putObject(params).on('httpUploadProgress', function(progress) {
+      console.log(progress);
+    }).send(function(err,data){
+      console.log(err);
+      if (err) return handleError(res, {message:"Unable to upload image. Try again & Check your internet!"});
+      return res.send(200);
+    }); 
   }) 
 
 }

@@ -1,8 +1,15 @@
 <div class="fullW thumbs_wrap paddingLR bglg">
 	<div id="hidden"></div>
-	<h2 class="colorbl centric">Add/Edit Project</h2>
+	<h3 class="colorbl centric">Projects of {{projectCtrl.user().name}}</h3>
 <section class="thumbs_wrap" ng-class="{ 'col-md-4' : projectCtrl.myProjects.length, 'col-md-2' : !projectCtrl.myProjects.length}">
-	<div class="fullW bgw box_shadow_dwn borderLt padding10" ng-repeat="project in projectCtrl.myProjects" style="margin-bottom:10px">{{project.name}}<br/>{{project.type.type}}</div>
+	<div class="padding10 fullW colorlb bgw borderLt box_shadow_dwn centric" style="margin-bottom:10px" ng-click="projectCtrl.$state.reload()">+Add Project</div>
+	<div class="fullW bgw box_shadow_dwn borderLt" ng-repeat="project in projectCtrl.myProjects" style="margin-bottom:10px" ng-click="projectCtrl.editThis(project)">
+		<img src="{{project.imagesInt[0]}}" width="100%"/>
+		<div class="fullW padding10">
+			<p class="size20"><b>{{project.name}}</b></p>
+			<p ng-repeat="category in project.type.categories">size:{{category.size}}; cost:{{category.totalPrice}}</p>
+		</div>
+	</div>
 </section>
 <section class="thumbs_wrap col-md-8">
 
@@ -15,10 +22,11 @@
 		<form name="projectForm">
 			<div ng-include="'step'+step.number+'.html'"></div>
 			<md-button class="md-primary" ng-hide="step.number==1" ng-click="projectCtrl.nextStep(-1)">Back</md-button>
-			<md-button class="md-primary floatR" ng-disabled="formStep{{step.number}}.$invalid" ng-hide="step.number==5" ng-click="projectCtrl.nextStep(1)">Next ({{step.number}}/3)</md-button>
-			<button type="button" class="b2w floatR" ng-click="projectCtrl.savePost(projectCtrl.project)" ng-show="projectCtrl.newUpload.length==1" style="padding: 10px" ng-disabled="formStep3.$invalid || formStep2.$invalid">Save Edit</button>
+			<md-button class="md-primary floatR" ng-disabled="formStep{{step.number}}.$invalid" ng-hide="step.number==projectCtrl.steps.length" ng-click="projectCtrl.nextStep(1)">Next ({{step.number}}/{{projectCtrl.steps.length}})</md-button>
+			<button type="button" class="b2w floatR" ng-click="projectCtrl.savePost(projectCtrl.project)" ng-show="projectCtrl.project._id" style="padding: 10px" ng-disabled="formStep{{$index+1}}.$invalid">Save Edits</button>
 		</form>
 	</section>
+	
 </section>
 </div>
 
@@ -68,8 +76,35 @@
     </md-radio-group>
 </div>
 <hr/>
+<p> Here you can add different types of categories of this project</p>
+<div layout="row" class="fullW floatL" ng-repeat="category in projectCtrl.project.type.categories">
+	<md-input-container flex="30">
+		<label>Size</label>
+		<input required type="number" name="devCharges" ng-model="projectCtrl.project.type.categories[$index].size">
+		<div ng-messages="projectForm.devCharges.$error">
+			<div ng-message="required">This is required.</div>
+		</div>
+	</md-input-container>
+	<md-input-container flex="30">
+		<label>Number of units of this Size</label>
+		<input required type="number" name="base" ng-model="projectCtrl.project.type.categories[$index].num">
+		<div ng-messages="projectForm.base.$error">
+			<div ng-message="required">This is required.</div>
+		</div>
+	</md-input-container>
+	<md-input-container flex="30" ng-if="projectCtrl.project.type.type==3" style="margin-top:10px">
+		<label>Villa Type</label>
+		<md-select name="type" ng-model="projectCtrl.project.type.categories[$index].villaType" required md-no-asterisk="false">
+			<md-option value="1">Land + Building</md-option>
+			<md-option value="2">Building + UDS</md-option>
+		</md-select>
+	</md-input-container>
+	<div flex="5" ng-click="projectCtrl.project.type.categories.splice($index, 1)" class="valignOut" ng-if="$index">&#x2715;</div>
+	<div flex="5" ng-hide="false" ng-bind="projectCtrl.project.type.categories[$index].totalPrice=projectCtrl.project.type.rps.total*projectCtrl.project.type.categories[$index].size"></div>
+</div>	
+<md-button style="margin:0px 0px 10px" ng-click="projectCtrl.project.type.categories.push({num:0,size:0})" class="md-raised md-primary">Add More</md-button>
 
-<md-input-container>
+<!--<md-input-container>
 	<label>Number of <span ng-if="projectCtrl.project.type==1">Plots</span><span ng-if="projectCtrl.project.type==2">Towers</span><span ng-if="projectCtrl.project.type==3">Villas</span></label>
 	<input type="number" required name="num" ng-model="projectCtrl.project.type.num" ng-change="projectCtrl.setSize(projectCtrl.project.type.num)">
 	<div ng-messages="projectForm.num.$error">
@@ -86,7 +121,7 @@
 			<div ng-message="required">Required.</div>
 		</div>
 	</md-input-container>
-</div>
+</div>-->
 
 <div class="fullW thumbs_wrap">
 	<md-input-container class="md-block" flex-gt-sm ng-if="projectCtrl.project.type.type==1">
@@ -98,13 +133,13 @@
         </div>
 		</md-input-container>
 	<div class="fullW" ng-if="projectCtrl.project.type.type==2">
-		<div class="fullW floatL" ng-if="projectCtrl.project.type.size"><label>No. of flats in each tower</label></div>
+		<!--<div class="fullW floatL"><label>No. of flats in each tower</label></div>
 		<md-input-container ng-repeat="size in projectCtrl.project.type.size track by $index" class="col-xs-2 floatL">
 			<input required name="upt{{$index}}" ng-model="projectCtrl.project.type.upt[$index]" placeholder="Tower {{$index+1}}">
 			<div ng-messages="projectForm.upt{{$index}}.$error">
 				<div ng-message="required">Required.</div>
 			</div>
-		</md-input-container>
+		</md-input-container>-->
 
 		<md-input-container class="fullW floatL">
 			<label>Percent UDS</label>
@@ -114,17 +149,11 @@
 			</div>
 		</md-input-container>
 	</div>
-	<md-input-container flex="50" ng-if="projectCtrl.project.type.type==3">
-		<label>Villa Type</label>
-		<md-select name="type" ng-model="projectCtrl.project.type.villaType" required md-no-asterisk="false">
-			<md-option value="1">Land + Building</md-option>
-			<md-option value="2">Building + UDS</md-option>
-		</md-select>
-	</md-input-container>
 </div>
-
+<br/>
 <div class="fullW floatL"><label>Rate/Sq.Feet</label></div>
 <div layout="row" class="fullW floatL">
+	<div ng-hide="true" ng-bind="projectCtrl.project.type.rps.total=projectCtrl.project.type.rps.base+projectCtrl.project.type.rps.devCharges+projectCtrl.project.type.rps.others"></div>
 	<md-input-container flex="34">
 		<label>Base Price</label>
 		<input required type="number" name="base" ng-model="projectCtrl.project.type.rps.base">
@@ -157,11 +186,15 @@
     </div>
 	<div map-lazy-load="https://maps.google.com/maps/api/js"
     map-lazy-load-params="{{projectCtrl.googleMapsUrl}}" class="fullW thumbs_wrap">
-      <ng-map center='current-position' geo-fallback-center="[40.74, -74.18]" style="height:60vh" geo-callback="projectCtrl.getCenter(projectCtrl, map)">
-       <marker position="{{projectCtrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="projectCtrl.getCurrentLocation(projectCtrl)" ng-if="projectCtrl.coordinates"></marker>
-     </ng-map>
+      	<ng-map center='current-position' geo-fallback-center="[40.74, -74.18]" style="height:60vh" geo-callback="projectCtrl.getCenter(projectCtrl)">
+       		<marker position="center" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="projectCtrl.getCurrentLocation(projectCtrl)"></marker>
+     	</ng-map>
     </div>
-    <b class="padding10 centric fullW floatL colorg">Selected Address: {{projectCtrl.project.location.name}}</b>
+    <p class="padding10 centric fullW floatL colorg">
+    	<b>Selected Address: {{projectCtrl.project.location.name}}</b>
+    	<br/>
+    	{{projectCtrl.project.location.lat | number:5}}, {{projectCtrl.project.location.lng | number:5}}
+    </p>
 
     
 </script>
@@ -198,36 +231,26 @@
       		</md-checkbox>
     	</div>
   	</div>
-	Images, Brocure left
 	<div>
-		<md-button type="button" ng-click="projectCtrl.manageProject(projectCtrl.project)">Submit</md-button>
+		<md-button type="button" ng-click="projectCtrl.manageProject(projectCtrl.project)" ng-if="!projectCtrl.project._id">Submit</md-button>
 	</div>
 </script>
 
 <script type="text/ng-template" id="step5.html">
-	<div class="bgw thumbs_wrap fullW" style="margin: 10px 0px" >
-		<p class="colorg"><b>Only add multiple images of same context.</b>
-		</p>
+	<div class="bgw thumbs_wrap fullW padding10" style="margin: 10px 0px" >
+		<h4>Images of Project</h4>
+		<upload-file heading="1) Image from Internal view" key="imagesInt/{{projectCtrl.project._id}}_1.jpg"></upload-file>
+		<upload-file heading="2) Image from Internal view" key="imagesInt/{{projectCtrl.project._id}}_2.jpg"></upload-file>
+		<upload-file heading="1) Image from External view" key="imagesExt/{{projectCtrl.project._id}}_1.jpg"></upload-file>
+		<upload-file heading="2) Image from External view" key="imagesExt/{{projectCtrl.project._id}}_2.jpg"></upload-file>
 
-	    <input ngf-drop ngf-select  ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'" ng-model="upload.files" class="inputfile" name="files" id="files" type="file" multiple="true" ngf-max-size="10MB" ngf-model-invalid="errorFile" type="file" accept="image/*" image="upload.compressedFiles" resize-max-height="1200" resize-max-width="1200" resize-quality="0.8" resize-type="image/jpg" ng-image-compress />
-	    <label for="files" class="valignOut drop-box thumbs_wrap fullW size15 cursorp" ng-if="!upload.files.length">Click to add images...</label>
-
-	    <div ng-if="upload.files.length>0" class="thumbs_wrap" style="padding: 10px">
-	    	<span ng-repeat="file in upload.compressedFiles" style="float: left;padding: 3px;margin:0px 5px;border:1px solid #DDD;position: relative;" class="bgw"><img ngf-thumbnail="upload.files[$index]"  height="80px" width="auto">
-	    		<span style="padding: 3px;position: absolute;top: 0px;z-index:2;right: 0px;margin:0px" class="w2g" ng-click="removeImage($index)" ng-show="!imageLoading[$index]">x</span>
-	    		<progress-circle diameter="20" style="position: absolute;top: 0px;height: 100%;background: rgba(255,255,255,0.7);" ng-if="imageLoading[$index]"></progress-circle>
-	    	</span>
-	    	<input ngf-select="addToFiles(newCompressedFiles, newFiles)" ng-model="newFiles" class="inputfile" name="newFiles" id="newFiles" type="file" multiple="true" ngf-max-size="10MB" ngf-model-invalid="errorFile" type="file" accept="image/*" image="newCompressedFiles" resize-max-height="1200" resize-max-width="1200" resize-quality="0.8" resize-type="image/jpg" ng-image-compress />
-	    	<label for="newFiles" class="colorbluegreen valignOut addMore">+</label>
-	        
-	    </div>
-    </div>
-
-	<md-input-container flex="50">
-		<label>Offers</label>
-		<input required name="offers" ng-model="projectCtrl.project.offers">
-		<div ng-messages="projectForm.offers.$error">
-			<div ng-message="required">This is required.</div>
-		</div>
-	</md-input-container>
+		<upload-file heading="Image of Offer" key="offer/{{projectCtrl.project._id}}.jpg"></upload-file>
+		<md-input-container flex="100">
+			<label>Offers Text</label>
+			<input required name="offerText" ng-model="projectCtrl.project.offers.text">
+			<div ng-messages="projectForm.offerText.$error">
+				<div ng-message="required">This is required.</div>
+			</div>
+		</md-input-container>
+	</div>	
 </script>
