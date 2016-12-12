@@ -21,3 +21,34 @@
 .modal-danger .modal-header {
   background: #d9534f;
 }
+.close{
+  position: fixed;
+  top: 20px;
+  right: 10px;
+  opacity: 0.5;
+  z-index: 10000;
+}
+.fullDialog{
+  width:100%;
+  max-width: 100%;
+  min-height: 100vh;
+  background: none;
+  box-shadow: none;
+  display: block;
+}
+
+#img_view  {
+padding: 0px;
+
+}
+.md-dialog-container{
+  z-index: 10000
+}
+
+.ng-image-gallery.inline .ng-image-gallery-modal
+{
+  height: 80vh;
+}
+.galleria {
+  cursor: default;
+};

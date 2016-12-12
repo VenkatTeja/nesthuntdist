@@ -8,11 +8,34 @@
 
     <div class="fullW thumbs_wrap">
       <div class="fullW thumbs_wrap" style="min-height:100vh">
+        <div class="padding10 fullW thumbs_wrap bgw " style="position:absolute;z-index:1;top:50px">
+          <div class="thumbs_wrap col-md-2" style="border-right:1px solid #efefef;padding:18px 0px">Loan Estimate: {{ $ctrl.getCurrentUser.loanEstimate }}</div>
+          <div class="thumbs_wrap col-md-5" style="border-right:1px solid #efefef">
+            <md-slider-container>
+              <span style="min-width:100px">Cost (in Lakhs)</span>
+              <md-slider flex min="0" max="1000" ng-model="$ctrl.filter.cost" aria-label="red" id="red-slider">
+              </md-slider>
+              <md-input-container>
+                <input flex type="number" ng-model="$ctrl.filter.cost" aria-label="red" aria-controls="red-slider" style="padding:10px 0px">
+              </md-input-container>
+            </md-slider-container> 
+          </div>      
+          <div class="col-md-5" style="border-right:1px solid #efefef">
+            <md-slider-container>
+              <span style="min-width:160px">Distance from Pin (in Km)</span>
+              <md-slider flex min="0" max="100" ng-model="$ctrl.filter.distance" aria-label="red" id="red-slider">
+              </md-slider>
+              <md-input-container>
+                <input flex type="number" ng-model="$ctrl.filter.distance" aria-label="red" aria-controls="red-slider" style="padding:10px 0px">
+              </md-input-container>
+            </md-slider-container> 
+          </div>
+        </div>
         <div map-lazy-load="https://maps.google.com/maps/api/js"
         map-lazy-load-params="{{$ctrl.googleMapsUrl}}" class="fullW thumbs_wrap">
-          <ng-map center='current-position' geo-fallback-center="[40.74, -74.18]" style="height:100vh">
-            <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="$ctrl.getCurrentLocation()"></marker>
-            <custom-marker ng-repeat="project in $ctrl.projects" position="{{project.location.lat}},{{project.location.lng}}">
+          <ng-map center='current-position' geo-fallback-center="[40.74, -74.18]" style="height:100vh" geo-callback="$ctrl.getCenter($ctrl)">
+            <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="$ctrl.getCurrentLocation($ctrl)"></marker>
+            <custom-marker ng-repeat="project in $ctrl.projects | filter:$ctrl.markerFilter" position="{{project.location.lat}},{{project.location.lng}}" on-click="$ctrl.showProject(project)">{{project._id}}
               <img src="http://images.all-free-download.com/images/graphiclarge/green_house_icon_vector_280701.jpg" id="dpsm" style="position:absolute;margin-left:-10px"/>
             </custom-marker>
           </ng-map>
@@ -21,7 +44,6 @@
         <input places-auto-complete ng-model="$ctrl.address" component-restrictions="{country:'in'}" types="{{$ctrl.types}}" on-place-changed="$ctrl.placeChanged()" style="padding:5px;width:100%;font-size:20px;position:absolute;bottom:0px;left:0px"/>
       </div>
       <div style="position:absolute;min-height:100vh;background:rgba(255,255,255,0.7)" class="fullW" ng-hide="$ctrl.Auth.isLoggedInSync()">
-        <div id="hidden"></div>
         <h2 class="centric colorbl">Welcome to Nest Hunt</h2>
         <p class="centric colorbl">Give us the following details and we will show the best properties you are eligible for</p>
         <div class="col-md-2"></div>
@@ -100,9 +122,46 @@
       <div class="col-md-4 padding10" ng-repeat="project in $ctrl.projects">
         <div class="fullW thumbs_wrap bgw box_shadow_dwn borderLt padding10">
           <h4>{{project.name}}</h4>
-          <p>{{project.type.rps.total}}</p>
+          <p ng-repeat="category in project.type.categories">size:{{category.size}}; cost:{{category.totalPrice}}</p>
         </div>
       </div>
     </div>
   </section>
 </div>
+
+
+<script type="text/ng-template" id="viewProject.html">
+
+    
+<md-dialog aria-label="imageModal" class="fullDialog" style="background:rgb(255,255,255)">
+    <button type="button" class="close" ng-click="cancel()" style="font-size:40px;color:black">&#10005;</button>
+    <div id="img_view" class="valignOut col-md-8 bgb" style="min-height:100vh">
+
+
+          <div class="fullW">
+            <ng-image-gallery
+              images="images"
+              methods="methods"
+              thumbnails="true"
+              inline="true"
+              img-bubbles="false"
+              bg-close="true"
+              bubbles="true"
+              img-anim="fadeup"
+              conf="conf"
+              on-open="opened();"
+              on-close="closed();"
+          ></ng-image-gallery>
+          </div>
+      </div>
+      <div class="col-md-4">
+        <h2>{{project.name}}</h2>
+        <p>{{project.info}}</p>
+        <p>Categories</p>
+        <p ng-repeat="category in project.type.categories">
+          Size: {{category.size}} | Price: {{category.totalPrice}}
+        </p>
+        <md-button class="md-raised md-warn">Buy</md-button>
+      </div>
+  </md-dialog>
+</script>

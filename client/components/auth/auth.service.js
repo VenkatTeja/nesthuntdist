@@ -38,6 +38,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
         password
       })
         .then(res => {
+          console.log('5555555555');
           $cookies.put('token', res.data.token);
           currentUser = User.get();
           return currentUser.$promise;

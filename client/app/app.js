@@ -1,7 +1,7 @@
 // 'use strict';
 
 import angular from 'angular';
-// import ngAnimate from 'angular-animate';
+import ngAnimate from 'angular-animate';
 import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
 import ngSanitize from 'angular-sanitize';
@@ -12,6 +12,7 @@ import uiBootstrap from 'angular-ui-bootstrap';
 import ngMaterial from 'angular-material';
 import ngMap from 'ngmap';
 import ngFileUpload from 'ng-file-upload';
+import ngImageGallery from 'ng-image-gallery';
 // import ngImgCrop from 'ng-img-crop-full-extended';
 // import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
@@ -37,7 +38,7 @@ import socket from '../components/socket/socket.service';
 import './app.css';
 
 angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    uiBootstrap, ngMaterial, ngMap, ngFileUpload, _Auth, account, admin, profile, navbar, footer, main, project, constants, socket, util
+    uiBootstrap, ngMaterial, ngMap, ngFileUpload, 'thatisuday.ng-image-gallery', _Auth, account, admin, profile, navbar, footer, main, project, constants, socket, util
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
@@ -79,6 +80,20 @@ angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket
         }
     }
   };
+}])
+//
+.controller('viewProject',["$scope", "$mdDialog", "project",function($scope, $mdDialog, project){
+  $scope.images = [];
+  $scope.project = project;
+  for(var i=0;i<2;++i){
+    $scope.images[i] = {title:project.name,url:project.imagesInt[i]};
+    $scope.images[i+2] = {title:project.name,url:project.imagesExt[i]};
+  }
+
+  $scope.cancel = function(){
+    $mdDialog.cancel();
+  }
+  
 }]);
 
 angular.element(document)

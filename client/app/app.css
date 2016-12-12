@@ -49,6 +49,7 @@ body {
 }
 
 @import '../../node_modules/angular-material/angular-material.min.css';
+@import '../../node_modules/ng-image-gallery/dist/ng-image-gallery.min.css';
 /* Component styles are injected through gulp */
 /* inject:css */
 @import 'admin/admin.css';

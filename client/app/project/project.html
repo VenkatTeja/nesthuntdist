@@ -187,7 +187,7 @@
 	<div map-lazy-load="https://maps.google.com/maps/api/js"
     map-lazy-load-params="{{projectCtrl.googleMapsUrl}}" class="fullW thumbs_wrap">
       	<ng-map center='current-position' geo-fallback-center="[40.74, -74.18]" style="height:60vh" geo-callback="projectCtrl.getCenter(projectCtrl)">
-       		<marker position="center" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="projectCtrl.getCurrentLocation(projectCtrl)"></marker>
+       		<marker position="{{projectCtrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="projectCtrl.getCurrentLocation(projectCtrl)"></marker>
      	</ng-map>
     </div>
     <p class="padding10 centric fullW floatL colorg">

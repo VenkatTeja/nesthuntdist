@@ -23,7 +23,6 @@ export class ProjectComponent {
     this.$timeout = $timeout;
     this.Upload = Upload;
     this.user = Auth.getCurrentUserSync;
-    console.log(this.user);
 
     // Upload Steps
     this.steps = [{name:'Project Location', number:1},
@@ -46,7 +45,6 @@ export class ProjectComponent {
   $onInit() {
     this.$http.get('/api/projects/myProjects/'+this.id)
       .then(response => {
-      console.log(response.data);
       this.myProjects = response.data;
     })
     .catch(function(err){
@@ -66,6 +64,7 @@ export class ProjectComponent {
     vm.$timeout(function(){
       vm.project.location.lat = vm.map.getCenter().lat();
       vm.project.location.lng = vm.map.getCenter().lng(); 
+      vm.coordinates = vm.project.location.lat+','+vm.project.location.lng;
       vm.$http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+vm.map.getCenter().lat()+','+vm.map.getCenter().lng()+'&sensor=true').then(response =>{
         vm.project.location.name = response.data.results[0].formatted_address;
       })
@@ -73,20 +72,23 @@ export class ProjectComponent {
   }
   // Due to Drap marker
   getCurrentLocation(event, vm){
-    console.log(event, vm);
     vm.$http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+event.latLng.lat()+','+event.latLng.lng()+'&sensor=true').then(response =>{
       vm.project.location.name = response.data.results[0].formatted_address;
     })
     vm.project.location.lat = event.latLng.lat();
     vm.project.location.lng = event.latLng.lng();
+    vm.coordinates = vm.project.location.lat+','+vm.project.location.lng;
   }
+
   // Due to Input text
   placeChanged() {
     this.place = this.getPlace();
     global.project.location.lat = this.place.geometry.location.lat();
     global.project.location.lng = this.place.geometry.location.lng();
     global.map.setCenter(this.place.geometry.location);
+    global.coordinates = global.project.location.lat+','+global.project.location.lng;
     this.project = global.project;
+    this.coordinates = global.coordinates;
   }
 
   manageProject(project){
