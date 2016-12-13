@@ -3,29 +3,31 @@
 
 <div style="background:black" class="fullW thumbs_wrap">
   
-  <section style="height:100vh;min-height:500px;background-image:url(http://gulshanhomz.com/img/bellina/7.jpg);opacity:0.7;margin-bottom:-100vh;position:fixed" class="fullW thumbs_wrap bgImage"></section>
+  <!-- <section style="height:100vh;min-height:500px;background-image:url(http://gulshanhomz.com/img/bellina/7.jpg);opacity:0.7;margin-bottom:-100vh;position:fixed" class="fullW thumbs_wrap bgImage"></section> -->
   <section class="fullW thumbs_wrap" style="height:100vh;min-height:500px">
 
     <div class="fullW thumbs_wrap">
       <div class="fullW thumbs_wrap" style="min-height:100vh">
-        <div class="padding10 fullW thumbs_wrap bgw " style="position:absolute;z-index:1;top:50px">
-          <div class="thumbs_wrap col-md-2" style="border-right:1px solid #efefef;padding:18px 0px">Loan Estimate: {{ $ctrl.getCurrentUser.loanEstimate }}</div>
-          <div class="thumbs_wrap col-md-5" style="border-right:1px solid #efefef">
+        <div class="fullW thumbs_wrap bgw padding10" style="position:absolute;z-index:1;top:50px" ng-show="$ctrl.Auth.isLoggedInSync()">
+          <div class="col-md-2" style="border-right:1px solid #efefef;padding:18px 0px"><div class="fullW centric">Loan Estimate: {{ $ctrl.getCurrentUser.loanEstimate }}</div></div>
+          <div class="col-md-5 centric" style="border-right:1px solid #efefef">
             <md-slider-container>
-              <span style="min-width:100px">Cost (in Lakhs)</span>
+              <!-- <span style="min-width:100px">Cost(Lakhs)</span> -->
               <md-slider flex min="0" max="1000" ng-model="$ctrl.filter.cost" aria-label="red" id="red-slider">
               </md-slider>
-              <md-input-container>
+              <md-input-container style="width:80px;max-width:80px">
+                <label>Cost(lakhs)</label>
                 <input flex type="number" ng-model="$ctrl.filter.cost" aria-label="red" aria-controls="red-slider" style="padding:10px 0px">
               </md-input-container>
             </md-slider-container> 
           </div>      
           <div class="col-md-5" style="border-right:1px solid #efefef">
             <md-slider-container>
-              <span style="min-width:160px">Distance from Pin (in Km)</span>
+              <!-- <span style="min-width:100px">Distance(Km)</span> -->
               <md-slider flex min="0" max="100" ng-model="$ctrl.filter.distance" aria-label="red" id="red-slider">
               </md-slider>
-              <md-input-container>
+              <md-input-container style="width:80px;max-width:80px">
+                <label>Distance(km)</label>
                 <input flex type="number" ng-model="$ctrl.filter.distance" aria-label="red" aria-controls="red-slider" style="padding:10px 0px">
               </md-input-container>
             </md-slider-container> 
@@ -35,7 +37,7 @@
         map-lazy-load-params="{{$ctrl.googleMapsUrl}}" class="fullW thumbs_wrap">
           <ng-map center='current-position' geo-fallback-center="[40.74, -74.18]" style="height:100vh" geo-callback="$ctrl.getCenter($ctrl)">
             <marker position="{{$ctrl.coordinates}}" animation="Animation.BOUNCE" centered="true" draggable="true" on-dragend="$ctrl.getCurrentLocation($ctrl)"></marker>
-            <custom-marker ng-repeat="project in $ctrl.projects | filter:$ctrl.markerFilter" position="{{project.location.lat}},{{project.location.lng}}" on-click="$ctrl.showProject(project)">{{project._id}}
+            <custom-marker ng-repeat="project in $ctrl.projects | filter:$ctrl.markerFilter" position="{{project.location.lat}},{{project.location.lng}}" on-click="$ctrl.showProject(project)" ng-if="$ctrl.coordinates">
               <img src="http://images.all-free-download.com/images/graphiclarge/green_house_icon_vector_280701.jpg" id="dpsm" style="position:absolute;margin-left:-10px"/>
             </custom-marker>
           </ng-map>

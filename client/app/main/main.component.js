@@ -1,7 +1,21 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import routing from './main.routes';
+
 var global = {};
+
+function getDistance(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295;    // Math.PI / 180
+  var c = Math.cos;
+  var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+          c(lat1 * p) * c(lat2 * p) * 
+          (1 - c((lon2 - lon1) * p))/2;
+
+  return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+}
+
+
+
 export class MainController {
 
   
@@ -43,10 +57,12 @@ export class MainController {
     vm.$timeout(function(){
       vm.coordinates = vm.map.getCenter().lat()+','+vm.map.getCenter().lng();
     },1000)
+    global = vm;
   }
   // Due to Drap marker
   getCurrentLocation(event, vm){
     vm.coordinates = event.latLng.lat()+','+event.latLng.lng();
+    global = vm;
   }
 
   // Due to Input text
@@ -58,18 +74,23 @@ export class MainController {
   }
 
   markerFilter(project){
-    var show = false;
+    var costOk = false;
+    var distOk = false;
     for(var i=0;i<project.type.categories.length;++i){
       if(project.type.categories[i].totalPrice<(global.filter.cost*100000)){
-        show = true;
+        costOk = true;
       }
     }
-    return show;
+    if(costOk){
+      var dist = getDistance(project.location.lat, project.location.lng, global.coordinates.split(',')[0], global.coordinates.split(',')[1]);
+      console.log(dist);
+      if(dist<global.filter.distance)
+        distOk = true;
+    }
+    return (distOk && costOk);
   }
   
   showProject(event, project){
-
-    console.log(project);
     global.$mdDialog.show({
       controller: 'viewProject',
       templateUrl: 'viewProject.html',
