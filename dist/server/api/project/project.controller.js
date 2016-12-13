@@ -24,6 +24,7 @@ exports.show = show;
 exports.create = create;
 exports.upsert = upsert;
 exports.patch = patch;
+exports.uploadfile = uploadfile;
 exports.destroy = destroy;
 
 var _fastJsonPatch = require('fast-json-patch');
@@ -33,6 +34,14 @@ var _fastJsonPatch2 = _interopRequireDefault(_fastJsonPatch);
 var _project = require('./project.model');
 
 var _project2 = _interopRequireDefault(_project);
+
+var _awsSdk = require('aws-sdk');
+
+var _awsSdk2 = _interopRequireDefault(_awsSdk);
+
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -87,7 +96,7 @@ function handleError(res, statusCode) {
 
 // Gets a list of Projects
 function index(req, res) {
-  return _project2.default.Project.find().exec().then(respondWithResult(res)).catch(handleError(res));
+  return _project2.default.Project.find().populate('type').exec().then(respondWithResult(res)).catch(handleError(res));
 }
 
 // Gets a list of My Projects
@@ -105,11 +114,19 @@ function create(req, res) {
   var body = req.body.data;
   var total = body.type.rps.base + body.type.rps.devCharges + body.type.rps.others;
   body.type.rps.total = total;
+  var imagesInt = body.imagesInt;
+  var imagesExt = body.imagesExt;
   return _project2.default.ProjectType.create(body.type).then(function (projectType) {
-    console.log(req.user._id);
     body.type = projectType._id;
     body.builder = req.user._id;
-    _project2.default.Project.create(body).then(respondWithResult(res, 201)).catch(handleError(res));
+    var newProject = new _project2.default.Project(body);
+
+    newProject.imagesInt = ['https://' + process.env.BUCKET + '.cellar.services.clever-cloud.com/imagesInt/' + newProject._id + '_1.jpg', 'https://' + process.env.BUCKET + '.cellar.services.clever-cloud.com/imagesInt/' + newProject._id + '_2.jpg'];
+    newProject.imagesExt = ['https://' + process.env.BUCKET + '.cellar.services.clever-cloud.com/imagesExt/' + newProject._id + '_1.jpg', 'https://' + process.env.BUCKET + '.cellar.services.clever-cloud.com/imagesExt/' + newProject._id + '_2.jpg'];
+    newProject.brochure = 'https://' + process.env.BUCKET + '.cellar.services.clever-cloud.com/brochure/' + newProject._id + '.jpg';
+    newProject.offers.pic = 'https://' + process.env.BUCKET + '.cellar.services.clever-cloud.com/offer/' + newProject._id + '.jpg';
+
+    newProject.save().then(respondWithResult(res, 201)).catch(handleError(res));
   }).catch(handleError(res));
   // return Project.Project.create(req.body)
   //   .then(respondWithResult(res, 201))
@@ -126,10 +143,33 @@ function upsert(req, res) {
 
 // Updates an existing Project in the DB
 function patch(req, res) {
-  if (req.body._id) {
+  if (req.body.data._id) {
     delete req.body._id;
   }
-  return _project2.default.Project.findById(req.params.id).exec().then(handleEntityNotFound(res)).then(patchUpdates(req.body)).then(respondWithResult(res)).catch(handleError(res));
+  return _project2.default.Project.findById(req.params.id).exec().then(handleEntityNotFound(res)).then(patchUpdates(req.body.data)).then(respondWithResult(res)).catch(handleError(res));
+}
+
+function uploadfile(req, res) {
+  _awsSdk2.default.config.update({ accessKeyId: process.env.CELLAR_ADDON_KEY_ID, secretAccessKey: process.env.CELLAR_ADDON_KEY_SECRET });
+  var ep = new _awsSdk2.default.Endpoint(process.env.CELLAR_ADDON_HOST);
+  var s3 = new _awsSdk2.default.S3({
+    endpoint: ep,
+    signatureVersion: 'v2'
+  });
+  var body = _fs2.default.createReadStream(req.files.file.path);
+  _fs2.default.rename(req.files.file.path, req.files.file.path + '.jpg', function (err) {
+    if (err) console.log('ERROR: ' + err);
+
+    body.path = body.path + '.jpg';
+    var params = { Bucket: process.env.BUCKET, Key: req.body.key, Body: body, ACL: 'public-read' };
+    var request = s3.putObject(params).on('httpUploadProgress', function (progress) {
+      console.log(progress);
+    }).send(function (err, data) {
+      console.log(err);
+      if (err) return handleError(res, { message: "Unable to upload image. Try again & Check your internet!" });
+      return res.send(200);
+    });
+  });
 }
 
 // Deletes a Project from the DB

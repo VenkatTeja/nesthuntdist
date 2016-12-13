@@ -58,11 +58,11 @@ function index(req, res) {
  * Creates a new user
  */
 function create(req, res) {
-  console.log(req.body);
   var newUser = new _user2.default(req.body);
   newUser.provider = 'local';
 
   if (newUser.role == 'admin') return res.send(400, { message: "Bad Request" });
+  newUser.loanEstimate = (0.3 * newUser.income - newUser.currentEmi) * 120;
   newUser.save().then(function (user) {
     var token = _jsonwebtoken2.default.sign({ _id: user._id }, _environment2.default.secrets.session, {
       expiresIn: 60 * 60 * 5

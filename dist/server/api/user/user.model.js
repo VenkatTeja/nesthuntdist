@@ -24,14 +24,14 @@ var UserSchema = new _mongoose.Schema({
   lastname: String,
   username: {
     type: String,
-    lowercase: true,
-    required: function required() {
-      if (authTypes.indexOf(this.provider) === -1) {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    lowercase: true
+    // required() {
+    //   if(authTypes.indexOf(this.provider) === -1) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
   },
   email: {
     type: String,
@@ -61,15 +61,31 @@ var UserSchema = new _mongoose.Schema({
   provider: String,
   salt: String,
 
-  // Other details
+  // Builder
   cin: String,
-  regAddress: String,
-  regPhone: Number,
   website: String,
+  projects: [{ type: _mongoose.Schema.Types.ObjectId, ref: "Project" }],
   // type: String, // Builder/Buyer
 
-  // For builder
-  projects: [{ type: _mongoose.Schema.Types.ObjectId, ref: "Project" }],
+  // Buyer
+  pan: String,
+  aadhar: String,
+  oAddress: String,
+  nWorkExp: String,
+  income: Number,
+  currentEmi: Number,
+  loanEstimate: Number,
+
+  // Documents
+  salarySlips: [String],
+  bankStatements: [String],
+  fcuReport: String,
+  addressProof: String,
+  form16: String,
+
+  // Common
+  address: String,
+  phone: Number,
 
   // Auth detials
   facebook: {},

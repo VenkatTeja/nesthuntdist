@@ -19,6 +19,12 @@ module.exports = {
   GOOGLE_SECRET: 'secret',
 
   // Control debug level for modules using visionmedia/debug
-  DEBUG: ''
+  DEBUG: '',
+
+  //Cellar
+  CELLAR_ADDON_KEY_SECRET: 'eOYEwn__lG2tuQlnaswTfb3AcFu2Ax1aZTN5vQ==',
+  CELLAR_ADDON_KEY_ID: 'BS_Q2KO01FR4FVGUDEFS',
+  CELLAR_ADDON_HOST: 'cellar.services.clever-cloud.com',
+  BUCKET: 'nesthunttest'
 };
 //# sourceMappingURL=local.env.js.map

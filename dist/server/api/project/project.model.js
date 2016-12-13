@@ -17,12 +17,12 @@ var ProjectSchema = new Schema({
   info: String,
   status: Number, // Status : 0 - completed, 1 - ongoing, 2-upcoming
   type: { type: Schema.Types.ObjectId, ref: "ProjectType" }, // Land/Flat/Villa
-  isLegalClr: Boolean, // Is Legal Cleared?
-  isTechClr: Boolean, // Is Technical Cleared?
+  LegalBy: String, // Is Legal Cleared?
+  techBy: String, // Is Technical Cleared?
   approvals: { dtcp: Boolean, cmda: Boolean, lpa: Boolean, panchayath: Boolean },
   imagesInt: [String],
   imagesExt: [String],
-  location: String,
+  location: { lat: String, lng: String, name: String },
   brochure: String,
   offers: { pic: String, text: String },
   mailId: String,
@@ -44,13 +44,10 @@ var ProjectTypeSchema = new _mongoose2.default.Schema({
   percentUDS: Number,
 
   // Villa
-  villaType: Number, // 1-L+B, 2-B+UDS
+  // villaType: Number, // 1-L+B, 2-B+UDS
 
-  num: Number,
-  rps: { base: Number, devCharges: Number, others: Number, total: Number }, // Rate per square feet
-  size: [Number]
-
-});
+  categories: [{ num: Number, size: Number, villaType: Number, totalPrice: Number }],
+  rps: { base: Number, devCharges: Number, others: Number, total: Number } });
 
 var ProjectType = _mongoose2.default.model('ProjectType', ProjectTypeSchema);
 

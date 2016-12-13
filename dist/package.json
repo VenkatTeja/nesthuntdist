@@ -4,7 +4,7 @@
   "main": "server/index.js",
   "dependencies": {
     "angular": "~1.5.5",
-    "angular-animate": "~1.5.5",
+    "angular-animate": "^1.5.9",
     "angular-aria": "~1.5.5",
     "angular-cookies": "~1.5.5",
     "angular-material": "^1.1.1",
@@ -14,6 +14,7 @@
     "angular-ui-bootstrap": "^2.0.1",
     "angular-ui-router": "~0.3.1",
     "angular-validation-match": "^1.9.0",
+    "aws-sdk": "^2.7.11",
     "babel-polyfill": "^6.7.2",
     "babel-runtime": "^6.6.1",
     "bluebird": "^3.3.3",
@@ -22,6 +23,7 @@
     "bootstrap-social": "^5.0.0",
     "composable-middleware": "^0.3.0",
     "connect-mongo": "^1.2.1",
+    "connect-multiparty": "^2.0.0",
     "cookie-parser": "^1.3.5",
     "core-js": "^2.2.1",
     "ejs": "^2.3.3",
@@ -31,6 +33,7 @@
     "express-session": "^1.11.3",
     "fast-json-patch": "^1.0.0",
     "font-awesome": ">=4.1.0",
+    "i": "^0.3.5",
     "jsonwebtoken": "^7.0.0",
     "lodash": "^4.6.1",
     "lusca": "^1.3.0",
@@ -38,7 +41,11 @@
     "method-override": "^2.3.5",
     "mongoose": "^4.1.2",
     "morgan": "~1.7.0",
+    "ng-file-upload": "^12.2.13",
+    "ng-image-gallery": "^2.0.8",
+    "ng-img-crop-full-extended": "^0.6.2",
     "ngmap": "^1.17.8",
+    "npm": "^4.0.3",
     "passport": "~0.3.0",
     "passport-facebook": "^2.0.0",
     "passport-google-oauth20": "^1.0.0",
@@ -142,7 +149,8 @@
   "scripts": {
     "test": "gulp test",
     "update-webdriver": "node node_modules/protractor/bin/webdriver-manager update",
-    "start": "NODE_ENV=production node server/index.js"
+    "start": "NODE_ENV=production node server/index.js",
+    "preinstall": "npm cache clean"
   },
-  "private": true
+  "private": false
 }
