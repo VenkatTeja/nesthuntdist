@@ -14,7 +14,7 @@ import ngMap from 'ngmap';
 import ngFileUpload from 'ng-file-upload';
 import ngImageGallery from 'ng-image-gallery';
 // import ngImgCrop from 'ng-img-crop-full-extended';
-// import ngMessages from 'angular-messages';
+import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
 
 
@@ -38,7 +38,7 @@ import socket from '../components/socket/socket.service';
 import './app.css';
 
 angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    uiBootstrap, ngMaterial, ngMap, ngFileUpload, 'thatisuday.ng-image-gallery', _Auth, account, admin, profile, navbar, footer, main, project, constants, socket, util
+    uiBootstrap, ngMaterial, ngMessages, ngMap, ngFileUpload, 'thatisuday.ng-image-gallery', _Auth, account, admin, profile, navbar, footer, main, project, constants, socket, util
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
@@ -60,35 +60,74 @@ angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket
       templateUrl:'/components/htmlTemplates/uploadFile.html',
       replace: true,
         link(scope, element, attrs) {
-          scope.uploadPic = function(file) {
+        scope.uploadPic = function(file) {
+            console.log('sssss');
         file.upload = Upload.upload({
           url: '/api/projects/uploadfile',
           data: {key:scope.key, file: file},
         });
 
         file.upload.then(function (response) {
-          $timeout(function () {
-            file.result = response.data;
-          });
+            scope.progress = "Upload Successful";
         }, function (response) {
           if (response.status > 0)
             scope.errorMsg = response.status + ': ' + response.data;
         }, function (evt) {
           // Math.min is to fix IE which reports 200% sometimes
-          file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+          scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))+'%';
+          if(scope.progress=='100%')
+            scope.progress = "Saving";
         });
         }
     }
   };
 }])
 //
-.controller('viewProject',["$scope", "$mdDialog", "project",function($scope, $mdDialog, project){
+.controller('viewProject',["$scope", "$mdDialog", "project", "$q", "$timeout",function($scope, $mdDialog, project, $q, $timeout){
   $scope.images = [];
   $scope.project = project;
-  for(var i=0;i<2;++i){
-    $scope.images[i] = {title:project.name,url:project.imagesInt[i]};
-    $scope.images[i+2] = {title:project.name,url:project.imagesExt[i]};
+
+  var isImage = function(src){
+  var deferred = $q.defer();
+  var image = new Image();
+    image.onerror = function() {
+        deferred.resolve(false);
+    };
+    image.onload = function() {
+        deferred.resolve(true);
+    };
+    image.src = src;
+    return deferred.promise;
+  };
+  var checkImageAndReplace = function(givenUrl, defaultUrl, cb){
+    var src = givenUrl;
+      isImage(givenUrl, $q).then(response=>{
+        if(!response)
+          src = defaultUrl;
+        return cb(src);
+      })
+  };
+
+  var images = [];
+  project.imagePresent = [];
+
+  for(var i=0;i<4;++i){
+    if(!project.imagePresent[i])
+    $scope.images.push({title:project.name,url:project.images[i]});
   }
+  var collectImages = function(i, project){
+    checkImageAndReplace(project.images[i], false, function(src){
+      if(!src)
+        $scope.images.splice(i,1);
+      if(i<3)
+        collectImages(i+1,project);
+    })
+  }
+
+  collectImages(0,project);
+  // $timeout(function(){
+  // },1111)
+  
 
   $scope.cancel = function(){
     $mdDialog.cancel();
@@ -102,3 +141,4 @@ angular.element(document)
       strictDi: true
     });
   });
+

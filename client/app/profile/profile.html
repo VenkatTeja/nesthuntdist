@@ -55,14 +55,22 @@
 				<div ng-message="md-maxlength">The description must be less than 100 characters long.</div>
 			</div>
 		</md-input-container>
-
-		<md-input-container flex="100">
-			<label>Webiste</label>
-			<input required name="website" ng-model="profile.user.website">
-			<div ng-messages="userForm.website.$error">
-				<div ng-message="required">This is required.</div>
-			</div>
-		</md-input-container>
+		<div layout="row">
+			<md-input-container flex="50">
+				<label>Pan</label>
+				<input required name="pan" ng-model="profile.user.pan">
+				<div ng-messages="userForm.pan.$error">
+					<div ng-message="required">This is required.</div>
+				</div>
+			</md-input-container>
+			<md-input-container flex="50">
+				<label>Webiste</label>
+				<input required name="website" ng-model="profile.user.website">
+				<div ng-messages="userForm.website.$error">
+					<div ng-message="required">This is required.</div>
+				</div>
+			</md-input-container>
+		</div>
 
 		<div>
 			<md-button type="submit" class="md-raised md-primary floatL">Save</md-button>

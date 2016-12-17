@@ -22,7 +22,7 @@
   background: #d9534f;
 }
 .close{
-  position: fixed;
+  position: absolute;
   top: 20px;
   right: 10px;
   opacity: 0.5;

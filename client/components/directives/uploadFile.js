@@ -15,21 +15,25 @@ angular.module('nestHuntApp')
       	link(scope, element, attrs) {
       		console.log('dddddddddddddddddddddd');
         	scope.uploadPic = function(file) {
+        		console.log('sssss');
 		    file.upload = Upload.upload({
 		      url: '/api/projects/uploadfile',
 		      data: {key:key, file: file},
 		    });
 
 		    file.upload.then(function (response) {
-		      $timeout(function () {
-		        file.result = response.data;
-		      });
+		    	console.log('sssss');
+		        scope.progress = "Upload Successful";
 		    }, function (response) {
+		    	console.log('sssss');
 		      if (response.status > 0)
 		        scope.errorMsg = response.status + ': ' + response.data;
 		    }, function (evt) {
 		      // Math.min is to fix IE which reports 200% sometimes
-		      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+		      scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total))+'%';
+		      console.log('sssss');
+		      if(scope.progress=='100%')
+		      	scope.progress = "Saving";
 		    });
 		    }
 		}

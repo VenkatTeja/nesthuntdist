@@ -76,11 +76,8 @@ export class MainController {
   markerFilter(project){
     var costOk = false;
     var distOk = false;
-    for(var i=0;i<project.type.categories.length;++i){
-      if(project.type.categories[i].totalPrice<(global.filter.cost*100000)){
-        costOk = true;
-      }
-    }
+    if(global.filter.cost<project.type.budget.max)
+      costOk = true;
     if(costOk){
       var dist = getDistance(project.location.lat, project.location.lng, global.coordinates.split(',')[0], global.coordinates.split(',')[1]);
       console.log(dist);

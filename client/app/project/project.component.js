@@ -14,19 +14,21 @@ export class ProjectComponent {
 
     this.project = {};
     this.project.location={};
-    this.project.type = {rps:{}, categories: [{num:0,size:0,villaType:1}], upt: [], type:1};
+    this.project.type = {rps:{}, lSize:{}, bSize:{}, budget:{}, type:1};
     this.project.status = 1;
     this.project.approvals = {};
-    this.project.offers = {};
+    this.project.offerCount = [];
+    this.project.offers = [];
+    this.offers = ["FullY Furnished", "Teak Wood Works", "Marble Flooring", "Modular Kitched", "Air Conditioning", "Security Camera", "RO Facility", "Free Car Parks", "2 Wheeler", "4 Wheeler", "TV,Mobiles", "Cupboards", "Solar Water Heater", "Kitchen Chimney", "Piped gas Connection", "Home Appliances", "Safety Grills", "Others"];
     this.$http = $http;
     this.$state = $state;
     this.$timeout = $timeout;
     this.Upload = Upload;
     this.user = Auth.getCurrentUserSync;
-
+    this.NgMap = NgMap;
     // Upload Steps
-    this.steps = [{name:'Project Location', number:1},
-                    {name:'Project Details', number:2},
+    this.steps = [{name:'Project Details', number:1},
+                    {name:'Project Location', number:2},
                     {name:'Project Type', number:3},
                     {name:'Clearances', number:4}];
     this.uploadStep = 1;
@@ -34,9 +36,7 @@ export class ProjectComponent {
     // Map
     global = this;
     this.types = "['establishment']";
-    NgMap.getMap().then(map => {
-      this.map = map;
-    });
+
     this.googleMapsUrl = 'https://maps.google.com/maps/api/js?key=AIzaSyAkRdm99u8ZxzbilGEK7FHOxfwd4uvg0II';
   
 
@@ -56,25 +56,32 @@ export class ProjectComponent {
     this.uploadStep += step;
 
   }
-  setSize(num){
-    this.project.type.size = new Array(num);
+
+  setMap(){
+    this.NgMap.getMap().then(map => {
+      this.map = map;
+      console.log(this.map.getCenter().lat());
+
+      this.project.location.lat = this.map.getCenter().lat();
+      this.project.location.lng = this.map.getCenter().lng(); 
+      this.coordinates = this.project.location.lat+','+this.project.location.lng;
+    })
+    .catch(err=>{
+      console.log(err);
+    });
   }
 
   getCenter(vm){
     vm.$timeout(function(){
-      vm.project.location.lat = vm.map.getCenter().lat();
-      vm.project.location.lng = vm.map.getCenter().lng(); 
-      vm.coordinates = vm.project.location.lat+','+vm.project.location.lng;
-      vm.$http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+vm.map.getCenter().lat()+','+vm.map.getCenter().lng()+'&sensor=true').then(response =>{
-        vm.project.location.name = response.data.results[0].formatted_address;
-      })
+      // 
     },5000)
   }
   // Due to Drap marker
   getCurrentLocation(event, vm){
-    vm.$http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+event.latLng.lat()+','+event.latLng.lng()+'&sensor=true').then(response =>{
-      vm.project.location.name = response.data.results[0].formatted_address;
-    })
+    // vm.$http.get('http://maps.googleapis.com/maps/api/geocode/json?latlng='+event.latLng.lat()+','+event.latLng.lng()+'&sensor=true').then(response =>{
+    //   vm.project.location.name = response.data.results[0].formatted_address;
+    // })
+    console.log('d');
     vm.project.location.lat = event.latLng.lat();
     vm.project.location.lng = event.latLng.lng();
     vm.coordinates = vm.project.location.lat+','+vm.project.location.lng;
@@ -82,6 +89,8 @@ export class ProjectComponent {
 
   // Due to Input text
   placeChanged() {
+    console.log('e');
+
     this.place = this.getPlace();
     global.project.location.lat = this.place.geometry.location.lat();
     global.project.location.lng = this.place.geometry.location.lng();
@@ -92,7 +101,6 @@ export class ProjectComponent {
   }
 
   manageProject(project){
-    
     this.$http.post('/api/projects',{data:project})
     .then(response =>{
       this.project._id = response.data._id;
@@ -105,12 +113,16 @@ export class ProjectComponent {
   }
 
   editProject(project){
+    // for(var i=0;i<this.offers.length;++i){
+    //   if(project.offerCount[i])
+    //     project.offers.push(this,offers[i]);
+    // }
+    // if(project.offers[project.offers.length-1]=="Others")
+    //   project.offers[project.offers.length-1] = project.otherOffer;
+    // console.log(project);
     
     this.$http.patch('/api/projects/'+project._id,{data:project})
     .then(response =>{
-      this.project._id = response.data._id;
-      this.uploadStep++;
-      this.steps.push({name:"Images & Offers", number:5});
     })
     .catch(function(err){
       console.log(err);
@@ -119,8 +131,10 @@ export class ProjectComponent {
 
   editThis(project){
     this.project = project;
+    this.coordinates = this.project.location.lat+','+this.project.location.lng;
     this.steps.push({name:"Images & Offers", number:5});  
   }
+
   getCoordinates(location){
     console.log(location.lat + ',' + location.lng);
     return location.lat + ',' + location.lng;

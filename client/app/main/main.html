@@ -159,11 +159,18 @@
       <div class="col-md-4">
         <h2>{{project.name}}</h2>
         <p>{{project.info}}</p>
-        <p>Categories</p>
-        <p ng-repeat="category in project.type.categories">
-          Size: {{category.size}} | Price: {{category.totalPrice}}
-        </p>
-        <md-button class="md-raised md-warn">Buy</md-button>
+        <h3 ng-if="project.type.type==1">Plots</h3>
+        <h3 ng-if="project.type.type==2">Flats</h3>
+        <h3 ng-if="project.type.type==3">Villas</h3>
+        <h3 ng-if="project.type.type==4">Row Houses</h3>
+        <hr/>
+        <p>Availability: {{project.type.nUnsold}}/{{project.type.nUnits}}</p>
+        <p ng-if="project.type.type!=2">Land Size Range: {{project.type.lSize.min}}-{{project.type.lSize.max}} Sq.Ft</p>
+        <p ng-if="project.type.type!=1">Building Size Range: {{project.type.bSize.min}}-{{project.type.bSize.max}} Sq.Ft</p>
+        <p>Price Range: {{project.type.budget.min}}-{{project.type.budget.max}} INR</p>
+        <md-button class="md-raised md-warn">Buy Now</md-button>
+        <p>Legal Cleared by {{project.legalBy}}</p>
+        <p>Technical Cleared by {{project.techBy}}</p>
       </div>
   </md-dialog>
 </script>

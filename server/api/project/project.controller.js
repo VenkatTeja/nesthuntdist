@@ -94,22 +94,26 @@ export function create(req, res) {
   body.type.rps.total = total;
   var imagesInt = body.imagesInt;  
   var imagesExt = body.imagesExt;
+  if(body.type.type==1)
+    delete body.type['bSize'];
+  else if(body.type.type==2)
+    delete body.type['lSize'];
+  
+  console.log(body);
   return Project.ProjectType.create(body.type)
     .then(function(projectType){
       body.type = projectType._id;
       body.builder = req.user._id;
       var newProject = new Project.Project(body);
 
-      newProject.imagesInt = [
+      newProject.images = [
         'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesInt/'+newProject._id+'_1.jpg',
-        'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesInt/'+newProject._id+'_2.jpg'
-      ];
-      newProject.imagesExt = [
+        'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesInt/'+newProject._id+'_2.jpg',
         'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesExt/'+newProject._id+'_1.jpg',
         'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/imagesExt/'+newProject._id+'_2.jpg'
       ];
       newProject.brochure = 'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/brochure/'+newProject._id+'.jpg';
-      newProject.offers.pic = 'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/offer/'+newProject._id+'.jpg';
+      newProject.offerPic = 'https://'+process.env.BUCKET+'.cellar.services.clever-cloud.com/offer/'+newProject._id+'.jpg';
       
       newProject.save()
       .then(respondWithResult(res, 201))

@@ -8,14 +8,14 @@ var ProjectSchema = new Schema({
   info: String,
   status: Number, // Status : 0 - completed, 1 - ongoing, 2-upcoming
   type: {type:Schema.Types.ObjectId, ref:"ProjectType"}, // Land/Flat/Villa
-  LegalBy: String, // Is Legal Cleared?
+  legalBy: String, // Is Legal Cleared?
   techBy: String, // Is Technical Cleared?
   approvals:{dtcp: Boolean, cmda: Boolean, lpa: Boolean, panchayath: Boolean},
-  imagesInt : [String],
-  imagesExt: [String],
+  images: [String],
   location: {lat:String,lng:String, name: String},
   brochure: String,
-  offers: {pic:String, text:String},
+  offers: [String],
+  offerPic: String,
   mailId: String,
   builder: {type:Schema.Types.ObjectId, ref:"User"}
 
@@ -25,20 +25,24 @@ var Project = mongoose.model('Project', ProjectSchema);
 
 var ProjectTypeSchema = new mongoose.Schema({
   project: {type:Schema.Types.ObjectId, ref:"Project"},
-  type: Number, // Land-1, Flat-2, Villa-3
+  type: Number, // Land-1, Flat-2, Villa-3, 4-Row House
   
-  // Land
-  layoutNo : Number,
+  nUnits: Number,
+  nUnsold: Number,
 
-  // Flat
-  upt: [Number], // Units per Tower
-  percentUDS: Number,
-
-  // Villa
-  // villaType: Number, // 1-L+B, 2-B+UDS
-
-  categories: [{num: Number, size: Number, villaType:Number, totalPrice:Number}],
+  lSize:{min:Number, max:Number},
+  bSize:{min:Number, max:Number},
+  budget:{min:Number, max:Number},
   rps: {base:Number, devCharges: Number, others: Number, total: Number}, // Rate per square feet
+
+  // Plot
+  layoutNo : String,
+
+  //flat, villa
+  uds:Number,
+
+  // Villa,rowhouse, flat
+  progress:Number
 });
 
 var ProjectType = mongoose.model('ProjectType', ProjectTypeSchema);
