@@ -3,6 +3,7 @@
 
 // Development specific configuration
 // ==================================
+
 module.exports = {
 
   // MongoDB connection options
@@ -14,3 +15,4 @@ module.exports = {
   seedDB: true
 
 };
+//# sourceMappingURL=development.js.map

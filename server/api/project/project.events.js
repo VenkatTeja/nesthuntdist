@@ -4,10 +4,20 @@
 
 'use strict';
 
-import {EventEmitter} from 'events';
-import ProjectModel from './project.model';
-var Project = ProjectModel.Project;
-var ProjectEvents = new EventEmitter();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _events = require('events');
+
+var _project = require('./project.model');
+
+var _project2 = _interopRequireDefault(_project);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Project = _project2.default.Project;
+var ProjectEvents = new _events.EventEmitter();
 
 // Set max event listeners (0 == unlimited)
 ProjectEvents.setMaxListeners(0);
@@ -19,16 +29,17 @@ var events = {
 };
 
 // Register the event emitter to the model events
-for(var e in events) {
-  let event = events[e];
+for (var e in events) {
+  var event = events[e];
   Project.schema.post(e, emitEvent(event));
 }
 
 function emitEvent(event) {
-  return function(doc) {
+  return function (doc) {
     ProjectEvents.emit(event + ':' + doc._id, doc);
     ProjectEvents.emit(event, doc);
   };
 }
 
-export default ProjectEvents;
+exports.default = ProjectEvents;
+//# sourceMappingURL=project.events.js.map

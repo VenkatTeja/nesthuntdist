@@ -1,8 +1,15 @@
 'use strict';
 /*eslint no-process-env:0*/
 
-import path from 'path';
-import _ from 'lodash';
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /*function requiredProcessEnv(name) {
   if(!process.env[name]) {
@@ -17,7 +24,7 @@ var all = {
   env: process.env.NODE_ENV,
 
   // Root path of server
-  root: path.normalize(`${__dirname}/../../..`),
+  root: _path2.default.normalize(__dirname + '/../../..'),
 
   // Browser-sync port
   browserSyncPort: process.env.BROWSER_SYNC_PORT || 3000,
@@ -48,25 +55,23 @@ var all = {
   facebook: {
     clientID: process.env.FACEBOOK_ID || 'id',
     clientSecret: process.env.FACEBOOK_SECRET || 'secret',
-    callbackURL: `${process.env.DOMAIN || ''}/auth/facebook/callback`
+    callbackURL: (process.env.DOMAIN || '') + '/auth/facebook/callback'
   },
 
   twitter: {
     clientID: process.env.TWITTER_ID || 'id',
     clientSecret: process.env.TWITTER_SECRET || 'secret',
-    callbackURL: `${process.env.DOMAIN || ''}/auth/twitter/callback`
+    callbackURL: (process.env.DOMAIN || '') + '/auth/twitter/callback'
   },
 
   google: {
     clientID: process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
-    callbackURL: `${process.env.DOMAIN || ''}/auth/google/callback`
+    callbackURL: (process.env.DOMAIN || '') + '/auth/google/callback'
   }
 };
 
 // Export the config object based on the NODE_ENV
 // ==============================================
-module.exports = _.merge(
-  all,
-  require('./shared'),
-  require(`./${process.env.NODE_ENV}.js`) || {});
+module.exports = _lodash2.default.merge(all, require('./shared'), require('./' + process.env.NODE_ENV + '.js') || {});
+//# sourceMappingURL=index.js.map
