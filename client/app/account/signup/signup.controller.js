@@ -18,7 +18,7 @@ export default class SignupController {
         username: this.user.username,
         email: this.user.email,
         password: this.user.password,
-        role: this.user.role
+        role: 'builder'
       })
         .then((user,user2) => {
           // Account created, redirect to home

@@ -26,7 +26,6 @@
 			<button type="button" class="b2w floatR" ng-click="projectCtrl.editProject(projectCtrl.project)" ng-show="projectCtrl.project._id" style="padding: 10px" ng-disabled="formStep{{$index+1}}.$invalid">Save Edits</button>
 		</form>
 	</section>
-	<div ng-include="'step5.html'"></div>
 </section>
 </div>
 
@@ -301,13 +300,10 @@
 
 		<upload-file heading="Offers" key="offer/{{projectCtrl.project._id}}.jpg"></upload-file>
 		
-  		<md-checkbox ng-model="projectCtrl.project.offerCount[$index]" ng-repeat="offer in projectCtrl.offers" class="col-xs-4">{{offer}}</md-checkbox>
-  		<md-input-container flex="100" ng-if="projectCtrl.project.offerCount.offer{{projectCtrl.offers.length-1}}">
-			<label>Other Offers</label>
-			<input required name="otherOffer" ng-model="projectCtrl.project.otherOffer">
-			<div ng-messages="projectForm.otherOffer.$error">
-				<div ng-message="required">This is required.</div>
-			</div>
-		</md-input-container>
+		<label>Add Offers - You can select from below or type new ones and press enter for each</label>
+		<md-chips ng-model="projectCtrl.project.offers" md-removable="true" placeholder="Type here..."></md-chips>
+		<div class="fullW" ng-if="projectCtrl.project.type.type">
+  			<span class="thumbs_wrap cursorp" ng-show="!(projectCtrl.project.offers.indexOf(offer)+1)" ng-repeat="offer in projectCtrl.offers" style="padding:5px 10px;border:1px solid #ddd; border-radius:5px;margin:5px 0px" ng-click="projectCtrl.addOffer($index)">{{offer}}</span>
+  		</div>
 	</div>	
 </script>

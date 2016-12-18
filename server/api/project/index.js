@@ -12,6 +12,7 @@ router.get('/', controller.index);
 router.get('/myProjects/:id', auth.isAuthenticated(), controller.myProjects);
 router.get('/:id', controller.show);
 router.post('/', auth.isAuthenticated(), controller.create);
+router.post('/addJson', auth.isAuthenticated(), controller.addJson);
 router.post('/uploadfile', auth.isAuthenticated(), multipartyMiddleware, controller.uploadfile);
 router.put('/:id', controller.upsert);
 router.patch('/:id', controller.patch);

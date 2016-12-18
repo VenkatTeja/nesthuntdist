@@ -16,7 +16,7 @@ import ngImageGallery from 'ng-image-gallery';
 // import ngImgCrop from 'ng-img-crop-full-extended';
 import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
-
+// import ngTagsInput from 'ng-tags-input';
 
 import {
   routeConfig
@@ -108,25 +108,22 @@ angular.module('nestHuntApp', [ngCookies, ngResource, ngSanitize, 'btford.socket
       })
   };
 
-  var images = [];
   project.imagePresent = [];
 
-  for(var i=0;i<4;++i){
-    if(!project.imagePresent[i])
+  for(var i=0;i<4;++i)
     $scope.images.push({title:project.name,url:project.images[i]});
-  }
-  var collectImages = function(i, project){
-    checkImageAndReplace(project.images[i], false, function(src){
+  $scope.images.push({title:'Offer',url:project.offerPic});
+
+  var collectImages = function(i, images){
+    checkImageAndReplace(images[i].url, false, function(src){
       if(!src)
         $scope.images.splice(i,1);
       if(i<3)
-        collectImages(i+1,project);
+        collectImages(i+1,images);
     })
   }
 
-  collectImages(0,project);
-  // $timeout(function(){
-  // },1111)
+  collectImages(0, $scope.images);
   
 
   $scope.cancel = function(){

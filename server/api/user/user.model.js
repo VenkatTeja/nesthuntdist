@@ -62,6 +62,7 @@ var UserSchema = new Schema({
   income: Number,
   currentEmi: Number,
   loanEstimate: Number,
+  loanTenure: Number,
   
   // Documents
   salarySlips:[String],

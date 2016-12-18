@@ -3,10 +3,10 @@
   <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
-      <h1>Sign up</h1>
+      <h1>Builder Sign up</h1>
       <form class="form" name="form" ng-submit="vm.register(form)" novalidate>
 
-        <div class="form-group" ng-class="{ 'has-success': form.username.$valid && vm.submitted,
+       <!--  <div class="form-group" ng-class="{ 'has-success': form.username.$valid && vm.submitted,
                                             'has-error': form.username.$invalid && vm.submitted }">
           <label>Username</label>
 
@@ -15,7 +15,7 @@
           <p class="help-block" ng-show="form.username.$error.required && vm.submitted">
             A Unique username is required
           </p>
-        </div>
+        </div> -->
 
         <div class="form-group" ng-class="{ 'has-success': form.email.$valid && vm.submitted,
                                             'has-error': form.email.$invalid && vm.submitted }">
@@ -63,13 +63,13 @@
             Passwords must match.
           </p>
         </div>
-        <div class="fullW thumbs_wrap">
+        <!-- <div class="fullW thumbs_wrap">
           <label class="floatL fullW thumbs_wrap">Choose One</label>
           <md-radio-group ng-model="vm.user.role" name="role" required>
                 <md-radio-button value="builder" class="md-primary col-sm-4">Builder</md-radio-button>
                 <md-radio-button value="buyer" class="col-sm-4"> Buyer </md-radio-button>
             </md-radio-group>
-      </div>
+      </div> -->
 
         <div>
           <button class="btn btn-inverse btn-lg btn-register" type="submit">
@@ -77,6 +77,9 @@
           </button>
           <a class="btn btn-default btn-lg btn-login" ui-sref="login">
             Login
+          </a>
+          <a class="btn btn-default btn-lg btn-login" href="/">
+            Buyer SignUp
           </a>
         </div>
 

@@ -40,7 +40,9 @@ export function create(req, res) {
 
   if(newUser.role=='admin')
     return res.send(400,{message:"Bad Request"});
-  newUser.loanEstimate = ((0.3*newUser.income)-newUser.currentEmi)*120;
+  console.log(((0.3*newUser.income)-newUser.currentEmi)*newUser.loanTenure*12, newUser);
+  if(newUser.role=='buyer')
+    newUser.loanEstimate = ((0.3*newUser.income)-newUser.currentEmi)*newUser.loanTenure*12;
   newUser.save()
     .then(function(user) {
       var token = jwt.sign({ _id: user._id }, config.secrets.session, {
@@ -83,18 +85,25 @@ export function destroy(req, res) {
 /* editBuilderProfile */
 export function editBuilderProfile(req, res){
   var body = req.body.data;
-  var key = ["name", "lastname", "regPhone", "regAddress", "cin", "website"];
-  for(var i=0;i<6;++i)
+  if(req.user.role=='builder')
+    var key = ["name", "lastname", "phone", "address", "cin", "website"];
+  else
+    var key = ["name", "lastname", "phone", "address"];
+
+  for(var i=0;i<key.length;++i)
     if(body.hasOwnProperty(key[i])){
+      body[key[i]] += '';
       if(validator.isEmpty(body[key[i]]))
         return res.send(400,{message: key+" is empty"});
     }
-  if(!validator.isLength(body.regPhone, {min:10,max:10}))
+  if(!validator.isLength(body.phone, {min:10,max:10}))
     return res.send(400,{message: "Phone number 10 digits only"});
-  if(!validator.isInt(body.regPhone))
+  if(!validator.isInt(body.phone))
     return res.send(400,{message: "Phone number is number only"});
-  if(!validator.isLength(body.cin, {min:21,max:21}))
-    return res.send(400,{message: "CIN 21 digits only"});
+  if(req.user.role=='builder'){
+    if(!validator.isLength(body.cin, {min:21,max:21}))
+      return res.send(400,{message: "CIN 21 digits only"});
+  }
   // Checks passed
 
   return User.findById(req.user._id).exec()
@@ -103,10 +112,10 @@ export function editBuilderProfile(req, res){
       user.name = body.name;
       user.lastname = body.lastname;
       user.cin = body.cin;
-      user.regPhone = body.regPhone;
-      user.regAddress = body.regAddress;
+      user.phone = body.phone;
+      user.address = body.address;
       user.website = body.website;
-
+      user.pan = body.pan;
       user.save().then(()=>{
         res.status(204).end();
       })

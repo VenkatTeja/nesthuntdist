@@ -7,18 +7,30 @@ import routes from './profile.routes';
 
 export class ProfileComponent {
   /*@ngInject*/
-  constructor($http, $location, Auth) {
+  constructor($http, $location, Auth, $timeout) {
     this.$http = $http;
+    this.$timeout = $timeout;
     this.user = Auth.getCurrentUserSync();
     this.id = $location.url().split('/profile/')[1].split('#')[0];
   }
 
   manageBuilder(builder){
-    this.$http.put('/api/users/builder',{data:builder}).success(function(response) {
-      console.log(response);
+    this.saving = true;
+    this.$http.put('/api/users/builder',{data:builder})
+    .then(response=> {
+      this.savingStatus = "Saved";
+      this.saving = false
+      this.$timeout(()=>{
+        this.savingStatus = '';
+      },2000);
     })
-    .catch(function(err){
+    .catch(err=>{
       console.log(err);
+      this.savingStatus = "Saved";
+      this.saving = false
+      this.$timeout(()=>{
+        this.savingStatus = '';
+      },2000);
     })
   }
 }

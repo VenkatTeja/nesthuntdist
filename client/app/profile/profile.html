@@ -24,21 +24,21 @@
 			</md-input-container>
 		</div>
 		<div layout="row">
-			<md-input-container class="md-block" flex-gt-sm>
-	          	<label>Corporate Identification Number</label>
-	          	<input name="cin" ng-model="profile.user.cin" minlength="21" maxlength="21" required />
+			<md-input-container class="md-block" flex-gt-sm ng-show="profile.user.role=='builder'">
+	          	<label>Corporate Identification Number (e.g. U99999AA9999AAA999999)</label>
+	          	<input name="cin" ng-model="profile.user.cin" minlength="21" maxlength="21" required ng-pattern="/^[A-Z]{1}[0-9]{5}[A-Z]{2}[0-9]{4}[A-Z]{3}[0-9]{6}$/"/>
 
 	          	<div ng-messages="userForm.cin.$error">
-	          		<div ng-message-exp="['minlength', 'maxlength']">
-			            CIN number should have 21 characters
+	          		<div ng-message-exp="['minlength', 'maxlength','pattern']">
+			            CIN number should have 21 characters and should look like a CIN number with all capitals
 			          </div>
 	            	<div ng-message="required">This is required.</div>
 	          	</div>
 	        </md-input-container>
 
 			<md-input-container class="md-block" flex-gt-sm>
-				<label>Registered Phone Number</label>
-				<input name="phone" ng-model="profile.user.phone" ng-pattern="/^[0-9]{10}$/" />
+				<label><span ng-if="profile.user.role=='builder'">Registered</span> Phone Number (e.g. 9999999999)</label>
+				<input required name="phone" ng-model="profile.user.phone" ng-pattern="/^[0-9]{10}$/" />
 
 				<div ng-messages="userForm.phone.$error">
 					<div ng-message="pattern">Please enter a valid phone number (e.g. 932345221x).</div>
@@ -48,7 +48,7 @@
 		
 
 		<md-input-container class="md-block">
-			<label>Registered Address</label>
+			<label><span ng-if="profile.user.role=='builder'">Registered</span> Address</label>
 			<input md-maxlength="100" required name="address" ng-model="profile.user.address">
 			<div ng-messages="userForm.address.$error">
 				<div ng-message="required">This is required.</div>
@@ -57,24 +57,28 @@
 		</md-input-container>
 		<div layout="row">
 			<md-input-container flex="50">
-				<label>Pan</label>
-				<input required name="pan" ng-model="profile.user.pan">
+				<label>Pan (e.g. AAAAA9999A)</label>
+				<input required name="pan" ng-model="profile.user.pan" ng-pattern="/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/">
 				<div ng-messages="userForm.pan.$error">
-					<div ng-message="required">This is required.</div>
+					<div ng-message="required">This is required.</div>				
+					<div ng-message="pattern">Pan Number pattern should be AAAAA9999A (Capital letters)</div>
 				</div>
 			</md-input-container>
 			<md-input-container flex="50">
-				<label>Webiste</label>
+				<label>Webiste (e.g. www.nesthunt.com)</label>
 				<input required name="website" ng-model="profile.user.website">
 				<div ng-messages="userForm.website.$error">
 					<div ng-message="required">This is required.</div>
 				</div>
 			</md-input-container>
 		</div>
-
+		<div class="valignOut fullW colorr" >
+			{{profile.savingStatus}}
+			<md-progress-circular class="md-hue-2" md-diameter="20px" ng-show="profile.saving">
+		</div>
 		<div>
-			<md-button type="submit" class="md-raised md-primary floatL">Save</md-button>
-			<a href="/project/{{profile.user._id}}"><md-button type="submit" class="md-raised floatR" >Manage Projects >></md-button></a>
+			<md-button type="submit" class="md-raised md-primary floatL" ng-disabled="userForm.$invalid">Save</md-button>
+			<a href="/project/{{profile.user._id}}" ng-if="profile.user.role=='builder'"><md-button type="submit" class="md-raised floatR" >Manage Projects >></md-button></a>
 		</div>
 	</form>
 </section>

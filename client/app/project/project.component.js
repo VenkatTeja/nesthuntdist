@@ -17,9 +17,8 @@ export class ProjectComponent {
     this.project.type = {rps:{}, lSize:{}, bSize:{}, budget:{}, type:1};
     this.project.status = 1;
     this.project.approvals = {};
-    this.project.offerCount = [];
     this.project.offers = [];
-    this.offers = ["FullY Furnished", "Teak Wood Works", "Marble Flooring", "Modular Kitched", "Air Conditioning", "Security Camera", "RO Facility", "Free Car Parks", "2 Wheeler", "4 Wheeler", "TV,Mobiles", "Cupboards", "Solar Water Heater", "Kitchen Chimney", "Piped gas Connection", "Home Appliances", "Safety Grills", "Others"];
+    this.offers = ["FullY Furnished", "Teak Wood Works", "Marble Flooring", "Modular Kitched", "Air Conditioning", "Security Camera", "RO Facility", "Free Car Parks", "2 Wheeler", "4 Wheeler", "TV,Mobiles", "Cupboards", "Solar Water Heater", "Kitchen Chimney", "Piped gas Connection", "Home Appliances", "Safety Grills"];
     this.$http = $http;
     this.$state = $state;
     this.$timeout = $timeout;
@@ -112,15 +111,7 @@ export class ProjectComponent {
     })
   }
 
-  editProject(project){
-    // for(var i=0;i<this.offers.length;++i){
-    //   if(project.offerCount[i])
-    //     project.offers.push(this,offers[i]);
-    // }
-    // if(project.offers[project.offers.length-1]=="Others")
-    //   project.offers[project.offers.length-1] = project.otherOffer;
-    // console.log(project);
-    
+  editProject(project){    
     this.$http.patch('/api/projects/'+project._id,{data:project})
     .then(response =>{
     })
@@ -140,25 +131,12 @@ export class ProjectComponent {
     return location.lat + ',' + location.lng;
   }
 
-  // uploadPic(file, key) {
-  //   file.upload = this.Upload.upload({
-  //     url: '/api/projects/uploadPic',
-  //     data: {key: key, file: file},
-  //   });
-
-  //   file.upload.then(function (response) {
-  //     this.$timeout(function () {
-  //       console.log(response.data);
-  //       file.result = response.data;
-  //     });
-  //   }, function (response) {
-  //     if (response.status > 0)
-  //       this.errorMsg = response.status + ': ' + response.data;
-  //   }, function (evt) {
-  //     // Math.min is to fix IE which reports 200% sometimes
-  //     file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
-  //   });
-  //   }
+  addOffer(index){
+    this.project.offers.push(this.offers[index]);
+  }
+  removeOffer(index){
+    this.project.offers.push(this.offers[index]);
+  }
 }
 
 export default angular.module('nestHuntApp.project', [uiRouter])

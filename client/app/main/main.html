@@ -9,7 +9,7 @@
     <div class="fullW thumbs_wrap">
       <div class="fullW thumbs_wrap" style="min-height:100vh">
         <div class="fullW thumbs_wrap bgw padding10" style="position:absolute;z-index:1;top:50px" ng-show="$ctrl.Auth.isLoggedInSync()">
-          <div class="col-md-2" style="border-right:1px solid #efefef;padding:18px 0px"><div class="fullW centric">Loan Estimate: {{ $ctrl.getCurrentUser.loanEstimate }}</div></div>
+          <div class="col-md-2" style="border-right:1px solid #efefef;padding:18px 0px" ng-show="$ctrl.getCurrentUser.role=='buyer'"><div class="fullW centric">Loan Estimate: {{ $ctrl.getCurrentUser.loanEstimate }}</div></div>
           <div class="col-md-5 centric" style="border-right:1px solid #efefef">
             <md-slider-container>
               <!-- <span style="min-width:100px">Cost(Lakhs)</span> -->
@@ -68,19 +68,27 @@
               </md-input-container>
             </div>
             <div layout="row">
-              <md-input-container flex="50">
+              <md-input-container flex="33">
                 <label>Gross Income</label>
                 <input required type="number" name="income" ng-model="$ctrl.user.income" min="0">
                 <div ng-messages="userForm.income.$error">
                   <div ng-message-exp="['required','min']">This is required.</div>
                 </div>
               </md-input-container>
-              <md-input-container flex="50">
+              <md-input-container flex="33">
                 <label>Current EMI</label>
                 <input required type="number" name="currentEmi" ng-model="$ctrl.user.currentEmi" min="0"
                max="$ctrl.user.income">
                 <div ng-messages="userForm.currentEmi.$error">
                   <div ng-message-exp="['required', 'min', 'max']">This is required and should be between 0 and max income</div>
+                </div>
+              </md-input-container>
+              <md-input-container flex="33">
+                <label>Loan Tenure (in Years)</label>
+                <input required type="number" name="loanTenure" ng-model="$ctrl.user.loanTenure" min="0"
+               max="30">
+                <div ng-messages="userForm.loanTenure.$error">
+                  <div ng-message-exp="['required', 'min', 'max']">This is required. Minimum 0 years, maximum 30years.</div>
                 </div>
               </md-input-container>
             </div>
@@ -103,6 +111,7 @@
                 </div>
               </md-input-container>
             </div>
+            <p class="colorr centric" ng-repeat="error in $ctrl.errors">{{error}}</p>
             <div class="fullW thumbs_wrap valignOut">
               <md-button type="submit" ng-disabled="userForm.$invalid" class="md-raised">SignUp</md-button>
             </div>
@@ -171,6 +180,10 @@
         <md-button class="md-raised md-warn">Buy Now</md-button>
         <p>Legal Cleared by {{project.legalBy}}</p>
         <p>Technical Cleared by {{project.techBy}}</p>
+        <div class="fullW" ng-if="project.offers.length">
+          <h6>Offers</h6></hr>
+          <span class="thumbs_wrap cursorp" ng-repeat="offer in project.offers" style="padding:5px 10px;border:1px solid #ddd; border-radius:5px;margin:5px 0px">{{offer}}</span>
+        </div>
       </div>
   </md-dialog>
 </script>

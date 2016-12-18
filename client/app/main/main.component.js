@@ -27,7 +27,10 @@ export class MainController {
     this.Auth = Auth;
     this.$mdDialog = $mdDialog;
     Auth.getCurrentUser(user =>{
-      this.filter = {'cost':user.loanEstimate/100000, distance:10};
+      if(user.loanEstimate)
+        this.filter = {'cost':user.loanEstimate/100000, distance:10};
+      else
+        this.filter = {'cost':15  , distance:10};
       console.log(user);
       this.getCurrentUser = user;
       
@@ -41,6 +44,7 @@ export class MainController {
     this.types = "['establishment']";
     NgMap.getMap().then(map => {
       this.map = map;
+      this.coordinates = this.map.getCenter().lat()+','+this.map.getCenter().lng();
     });
     this.googleMapsUrl = 'https://maps.google.com/maps/api/js?key=AIzaSyAkRdm99u8ZxzbilGEK7FHOxfwd4uvg0II';
   }
@@ -50,14 +54,17 @@ export class MainController {
       .then(response => {
         this.projects = response.data;
         // this.socket.syncUpdates('thing', this.awesomeThings);
+      })
+      .catch(err=>{
+        console.log(err);
       });
   }
 
   getCenter(vm){
-    vm.$timeout(function(){
-      vm.coordinates = vm.map.getCenter().lat()+','+vm.map.getCenter().lng();
-    },1000)
-    global = vm;
+    // vm.$timeout(function(){
+    //   vm.coordinates = vm.map.getCenter().lat()+','+vm.map.getCenter().lng();
+    // },1000)
+    // global = vm;
   }
   // Due to Drap marker
   getCurrentLocation(event, vm){
@@ -76,7 +83,7 @@ export class MainController {
   markerFilter(project){
     var costOk = false;
     var distOk = false;
-    if(global.filter.cost<project.type.budget.max)
+    if(global.filter.cost>(project.type.budget.min/100000))
       costOk = true;
     if(costOk){
       var dist = getDistance(project.location.lat, project.location.lng, global.coordinates.split(',')[0], global.coordinates.split(',')[1]);
@@ -113,18 +120,23 @@ export class MainController {
         role: 'buyer',
         phone: user.phone,
         income: user.income,
-        currentEmi: user.currentEmi
+        currentEmi: user.currentEmi,
+        loanTenure: user.loanTenure
       }).then((user) => {
           // Account created, redirect to home
           this.$state.reload();
         })
         .catch(err => {
           err = err.data;
-          this.errors = {};
+          this.errors = [];
           // Update validity of form fields that match the mongoose errors
           angular.forEach(err.errors, (error, field) => {
-            form[field].$setValidity('mongoose', false);
-            this.errors[field] = error.message;
+            console.log(err.errors);
+            if(form[field])
+            {
+              // form[field].$setValidity('mongoose', false);
+              this.errors.push(error.message);
+            }
           });
         });
     }
