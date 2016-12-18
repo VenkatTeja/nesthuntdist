@@ -323,19 +323,41 @@ export function addJson(req, res) {
 
 // Upserts the given Project in the DB at the specified ID
 export function upsert(req, res) {
-  if(req.body._id) {
-    delete req.body._id;
-  }
-  return Project.Project.findOneAndUpdate(req.params.id, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
-
-    .then(respondWithResult(res))
+  
+  Project.Project.findById(req.params.id).exec()
+    .then(project=>{
+      Project.ProjectType.findById(req.body.data.type._id).exec()
+        .then(projectType=>{
+          for(var key in req.body.data.type){
+            if(req.body.data.type.hasOwnProperty(key))
+              projectType[key] = req.body.data.type[key];
+          }
+          projectType.save()
+          .then(projectType=>{
+            for(var key in req.body.data){
+              console.log(key);
+              if(req.body.data.hasOwnProperty(key))
+                if(key!='type'){
+                  console.log(req.body.data[key]);
+                  project[key] = req.body.data[key];
+                }
+            }
+            console.log(project);
+            project.save()
+            .then(respondWithResult(res))
+            .catch(handleError(res));
+          })
+          .catch(handleError(res));
+        })
+    })
     .catch(handleError(res));
 }
 
+
 // Updates an existing Project in the DB
 export function patch(req, res) {
-  if(req.body.data._id)
-    delete req.body.data._id;
+  // if(req.body.data._id)
+  //   delete req.body.data._id;
 
   console.log(req.body);
   return Project.Project.findById(req.params.id).exec()

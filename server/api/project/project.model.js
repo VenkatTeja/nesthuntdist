@@ -17,7 +17,8 @@ var ProjectSchema = new Schema({
   offers: [String],
   offerPic: String,
   mailId: String,
-  builder: {type:Schema.Types.ObjectId, ref:"User"}
+  builder: {type:Schema.Types.ObjectId, ref:"User"},
+  createdOn: {type:Date, default:Date.now()}
 
 });
 

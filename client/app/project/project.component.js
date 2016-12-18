@@ -25,6 +25,8 @@ export class ProjectComponent {
     this.Upload = Upload;
     this.user = Auth.getCurrentUserSync;
     this.NgMap = NgMap;
+    this.savingStatus = "Save Edits";
+
     // Upload Steps
     this.steps = [{name:'Project Details', number:1},
                     {name:'Project Location', number:2},
@@ -111,12 +113,23 @@ export class ProjectComponent {
     })
   }
 
-  editProject(project){    
-    this.$http.patch('/api/projects/'+project._id,{data:project})
+  editProject(project){ 
+  this.saving = true;
+    this.$http.put('/api/projects/'+project._id,{data:project})
     .then(response =>{
+      this.saving = false;
+      this.savingStatus = "Saved";
+      this.$timeout(()=>{
+        this.savingStatus = "Save Edits";
+      }, 1000);
     })
     .catch(function(err){
       console.log(err);
+      this.saving = false;
+      this.savingStatus = "Saved";
+      this.$timeout(()=>{
+        this.savingStatus = "Save Edits";
+      }, 1000);
     })
   }
 

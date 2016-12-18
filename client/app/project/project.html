@@ -22,8 +22,11 @@
 		<form name="projectForm">
 			<div ng-include="'step'+step.number+'.html'"></div>
 			<md-button class="md-primary" ng-hide="step.number==1" ng-click="projectCtrl.nextStep(-1)">Back</md-button>
-			<md-button class="md-primary floatR" ng-disabled="formStep{{step.number}}.$invalid" ng-hide="step.number==projectCtrl.steps.length" ng-click="projectCtrl.nextStep(1)">Next ({{step.number}}/{{projectCtrl.steps.length}})</md-button>
-			<button type="button" class="b2w floatR" ng-click="projectCtrl.editProject(projectCtrl.project)" ng-show="projectCtrl.project._id" style="padding: 10px" ng-disabled="formStep{{$index+1}}.$invalid">Save Edits</button>
+			<md-button class="md-primary floatR" ng-disabled="projectForm.$invalid" ng-hide="step.number==projectCtrl.steps.length" ng-click="projectCtrl.nextStep(1)">Next ({{step.number}}/{{projectCtrl.steps.length}})</md-button>
+			<button type="button" class="b2w floatR valignOut" ng-click="projectCtrl.editProject(projectCtrl.project)" ng-show="projectCtrl.project._id" style="padding: 10px" ng-disabled="projectForm.$invalid">
+				<span style="padding:0px 10px">{{projectCtrl.savingStatus}}</span>
+				<md-progress-circular class="md-warn md-hue-3" md-diameter="15px" ng-show="projectCtrl.saving"></md-progress>
+			</button>
 		</form>
 	</section>
 </section>

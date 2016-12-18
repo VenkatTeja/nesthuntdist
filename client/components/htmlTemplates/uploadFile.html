@@ -2,7 +2,7 @@
    <form name="myForm">
     <legend>{{heading}}</legend>
     <input type="file" ngf-select ng-model="picFile" name="file"    
-           accept="image/*" ngf-max-size="2MB" required
+           accept="image/*" ngf-max-size="2MB" 
            ngf-model-invalid="errorFile">
     <i ng-show="myForm.file.$error.required">*required</i><br>
     <i ng-show="myForm.file.$error.maxSize">File too large 
