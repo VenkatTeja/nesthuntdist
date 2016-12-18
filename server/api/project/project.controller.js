@@ -279,9 +279,11 @@ function addJson(req, res) {
 function upsert(req, res) {
 
   _project2.default.Project.findById(req.params.id).exec().then(function (project) {
-    _project2.default.ProjectType.findById(req.body.data.type._id).exec().then(function (projectType) {
+    _project2.default.ProjectType.findById(project.type).exec().then(function (projectType) {
       for (var key in req.body.data.type) {
-        if (req.body.data.type.hasOwnProperty(key)) projectType[key] = req.body.data.type[key];
+        if (req.body.data.type.hasOwnProperty(key)) {
+          projectType[key] = req.body.data.type[key];
+        }
       }
       projectType.save().then(function (projectType) {
         for (var key in req.body.data) {
