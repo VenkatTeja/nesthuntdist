@@ -117,7 +117,7 @@ function show(req, res) {
 // Creates a new Project in the DB
 function create(req, res) {
   var body = req.body.data;
-  var total = body.type.rps.base + body.type.rps.devCharges + body.type.rps.others;
+  var total = body.type.rps.base + body.type.rps.devCharges + body.type.rps.regCharges + body.type.rps.others;
   body.type.rps.total = total;
   var imagesInt = body.imagesInt;
   var imagesExt = body.imagesExt;
@@ -163,7 +163,7 @@ var addjson = function addjson(i, prj, res) {
           name: prj[i].name,
           location: { name: prj[i].locationName, lat: prj[i].lat, lng: prj[i].lng },
           type: { type: type,
-            rps: { base: prj[i].base, devCharges: 0, others: 0, total: prj[i].base },
+            rps: { base: prj[i].base, devCharges: 0, regCharges: 0, others: 0, total: prj[i].base },
             budget: { min: budget[0] * 100000, max: budget[1] * 100000 },
             nUnits: prj[i].nUnits,
             nUnsold: prj[i].nUnsold
@@ -223,7 +223,7 @@ var addjson = function addjson(i, prj, res) {
       var body = {
         name: prj[i].name,
         location: { name: prj[i].locationName, lat: prj[i].lat, lng: prj[i].lng },
-        type: { type: type, rps: { base: prj[i].base, devCharges: 0, others: 0, total: prj[i].base }, budget: { min: budget[0], max: budget[1] }, nUnits: prj[i].nUnits, nUnsold: prj[i].nUnsold },
+        type: { type: type, rps: { base: prj[i].base, devCharges: 0, regCharges: 0, others: 0, total: prj[i].base }, budget: { min: budget[0], max: budget[1] }, nUnits: prj[i].nUnits, nUnsold: prj[i].nUnsold },
         techBy: prj[i].techBy,
         legalBy: prj[i].legalBy,
         mailId: prj[i].mailId,
@@ -271,7 +271,6 @@ var addjson = function addjson(i, prj, res) {
   });
 };
 function addJson(req, res) {
-
   addjson(0, prj, res);
 }
 
@@ -285,6 +284,7 @@ function upsert(req, res) {
           projectType[key] = req.body.data.type[key];
         }
       }
+      projectType.rps.total = projectType.rps.base + projectType.rps.devCharges + projectType.rps.regCharges + projectType.rps.others;
       projectType.save().then(function (projectType) {
         for (var key in req.body.data) {
           console.log(key);

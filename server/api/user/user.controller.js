@@ -62,8 +62,6 @@ function create(req, res) {
   newUser.provider = 'local';
 
   if (newUser.role == 'admin') return res.send(400, { message: "Bad Request" });
-  console.log((0.3 * newUser.income - newUser.currentEmi) * newUser.loanTenure * 12, newUser);
-  if (newUser.role == 'buyer') newUser.loanEstimate = (0.3 * newUser.income - newUser.currentEmi) * newUser.loanTenure * 12;
   newUser.save().then(function (user) {
     var token = _jsonwebtoken2.default.sign({ _id: user._id }, _environment2.default.secrets.session, {
       expiresIn: 60 * 60 * 5
@@ -101,7 +99,7 @@ function destroy(req, res) {
 /* editBuilderProfile */
 function editBuilderProfile(req, res) {
   var body = req.body.data;
-  if (req.user.role == 'builder') var key = ["name", "lastname", "phone", "address", "cin", "website"];else var key = ["name", "lastname", "phone", "address"];
+  if (req.user.role == 'builder') var key = ["name", "owner", "phone", "address", "cin", "website"];else var key = ["name", "lastname", "phone", "address"];
 
   for (var i = 0; i < key.length; ++i) {
     if (body.hasOwnProperty(key[i])) {
@@ -119,6 +117,8 @@ function editBuilderProfile(req, res) {
     console.log(user, 22243);
     user.name = body.name;
     user.lastname = body.lastname;
+    user.owner = body.owner;
+    user.attorney = body.attorney;
     user.cin = body.cin;
     user.phone = body.phone;
     user.address = body.address;

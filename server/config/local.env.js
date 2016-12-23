@@ -25,6 +25,8 @@ module.exports = {
   CELLAR_ADDON_KEY_SECRET: 'eOYEwn__lG2tuQlnaswTfb3AcFu2Ax1aZTN5vQ==',
   CELLAR_ADDON_KEY_ID: 'BS_Q2KO01FR4FVGUDEFS',
   CELLAR_ADDON_HOST: 'cellar.services.clever-cloud.com',
-  BUCKET: 'nesthunttest'
+  BUCKET: 'nesthunttest',
+
+  MONGODB_ADDON_URI: 'mongodb://uaft5vvcgd3lem7:bbMLsJBhwT1xc2Fa7oHv@bkemlocaff59baa-mongodb.services.clever-cloud.com:27017/bkemlocaff59baa'
 };
 //# sourceMappingURL=local.env.js.map

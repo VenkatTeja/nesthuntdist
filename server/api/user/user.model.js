@@ -62,6 +62,8 @@ var UserSchema = new _mongoose.Schema({
   salt: String,
 
   // Builder
+  owner: String,
+  attorney: String,
   cin: String,
   website: String,
   projects: [{ type: _mongoose.Schema.Types.ObjectId, ref: "Project" }],

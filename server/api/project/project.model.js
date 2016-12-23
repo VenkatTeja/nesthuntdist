@@ -43,7 +43,7 @@ var ProjectTypeSchema = new _mongoose2.default.Schema({
   lSize: { min: Number, max: Number },
   bSize: { min: Number, max: Number },
   budget: { min: Number, max: Number },
-  rps: { base: Number, devCharges: Number, others: Number, total: Number }, // Rate per square feet
+  rps: { base: Number, devCharges: Number, regCharges: Number, others: Number, total: Number }, // Rate per square feet
 
   // Plot
   layoutNo: String,
