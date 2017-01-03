@@ -22,6 +22,16 @@ var authTypes = ['github', 'twitter', 'facebook', 'google'];
 var UserSchema = new _mongoose.Schema({
   name: String,
   lastname: String,
+  middlename: String,
+  fathername: String,
+  mothername: String,
+  dob: String,
+  title: String,
+  relation: String,
+  gender: String,
+  maritialStatus: String,
+  incomeType: String,
+
   username: {
     type: String,
     lowercase: true
@@ -70,10 +80,95 @@ var UserSchema = new _mongoose.Schema({
   // type: String, // Builder/Buyer
 
   // Buyer
+  shortlist: [{ type: _mongoose.Schema.Types.ObjectId, ref: 'Project' }],
+  //identity Details
+  applicantStatus: String,
   pan: String,
-  aadhar: String,
-  oAddress: String,
-  nWorkExp: String,
+  voterId: String,
+  dLicense: String,
+  passportNo: String,
+  adharNo: String,
+  mobile: Number,
+
+  // Addresses
+  office: { address1: String,
+    address2: String,
+    address3: String,
+    landmark: String,
+    city: String,
+    area: String,
+    country: String,
+    state: String,
+    pincode: String,
+    fax: String,
+    std: String,
+    contactNo: String
+  },
+  cResidence: { address1: String,
+    address2: String,
+    address3: String,
+    landmark: String,
+    city: String,
+    area: String,
+    country: String,
+    state: String,
+    pincode: String,
+    fax: String,
+    std: String,
+    contactNo: String
+  },
+  pResidence: { address1: String,
+    address2: String,
+    address3: String,
+    landmark: String,
+    city: String,
+    area: String,
+    country: String,
+    state: String,
+    pincode: String,
+    fax: String,
+    std: String,
+    contactNo: String
+  },
+
+  // Occupation
+  occupation: { crntEmpName: String,
+    email: String,
+    crntJobExp: String,
+    tJobExp: String,
+    empType: String,
+    department: String,
+    designation: String,
+    marginalProfile: String,
+    empId: String,
+    groupEmp: { type: String, default: 'No' }
+  },
+
+  // Bank details
+  bank: { bankCode: String,
+    branchCode: String,
+    accountNo: String,
+    accountType: String,
+    since: String,
+    isPrimary: String,
+    isMicrcode: String
+  },
+
+  // Reference
+  reference: { name: String,
+    relation: String,
+    address1: String,
+    address2: String,
+    address3: String,
+    city: String,
+    country: String,
+    state: String,
+    pincode: String,
+    email: String,
+    mobile: String,
+    phone: String
+  },
+
   income: Number,
   currentEmi: Number,
   loanEstimate: Number,
@@ -300,4 +395,8 @@ UserSchema.methods = {
 };
 
 exports.default = _mongoose2.default.model('User', UserSchema);
+
+
+var deepPopulate = require('mongoose-deep-populate')(_mongoose2.default);
+UserSchema.plugin(deepPopulate, { populate: {} });
 //# sourceMappingURL=user.model.js.map

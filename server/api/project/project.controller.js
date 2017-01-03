@@ -111,7 +111,11 @@ function myProjects(req, res) {
 
 // Gets a single Project from the DB
 function show(req, res) {
-  return _project2.default.Project.findById(req.params.id).exec().then(handleEntityNotFound(res)).then(respondWithResult(res)).catch(handleError(res));
+  return _project2.default.Project.findById(req.params.id).populate('type').exec().then(handleEntityNotFound(res)).then(function (project) {
+    var isShortlisted = false; // If user shortlisted this project
+    if (req.user.shortlist) if (req.user.shortlist.indexOf(req.params.id) + 1) isShortlisted = true;
+    return res.json({ project: project, isShortlisted: isShortlisted });
+  }).catch(handleError(res));
 }
 
 // Creates a new Project in the DB

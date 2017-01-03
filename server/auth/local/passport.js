@@ -14,6 +14,7 @@ var _passportLocal = require('passport-local');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function localAuthenticate(User, email, password, done) {
+  console.log(email);
   User.findOne({
     email: email.toLowerCase()
   }).exec().then(function (user) {

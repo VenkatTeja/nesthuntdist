@@ -21,6 +21,7 @@ router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/builder', auth.isAuthenticated(), controller.editBuilderProfile);
 
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
+router.put('/shortlist/:id', auth.isAuthenticated(), controller.shortlist);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 

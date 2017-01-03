@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.index = index;
 exports.create = create;
 exports.show = show;
+exports.shortlist = shortlist;
 exports.destroy = destroy;
 exports.editBuilderProfile = editBuilderProfile;
 exports.changePassword = changePassword;
@@ -86,6 +87,16 @@ function show(req, res, next) {
   });
 }
 
+function shortlist(req, res) {
+  var index = req.user.shortlist.indexOf(req.params.id);
+  if (index < 0) req.user.shortlist.push(req.params.id);else req.user.shortlist.splice(index, 1);
+
+  return req.user.save().then(function () {
+    _user2.default.findById(req.user._id).deepPopulate('shortlist.type').exec().then(function (user) {
+      res.json(user.shortlist);
+    });
+  }).catch(handleError(res));
+}
 /**
  * Deletes a user
  * restriction: 'admin'
@@ -155,7 +166,7 @@ function changePassword(req, res) {
 function me(req, res, next) {
   var userId = req.user._id;
 
-  return _user2.default.findOne({ _id: userId }, '-salt -password').exec().then(function (user) {
+  return _user2.default.findById(userId, '-salt -password').deepPopulate('shortlist.type').exec().then(function (user) {
     // don't ever give out the password or salt
     if (!user) {
       return res.status(401).end();

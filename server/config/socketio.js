@@ -70,6 +70,8 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/visit/visit.socket').register(socket);
+  require('../api/purchase/purchase.socket').register(socket);
   require('../api/project/project.socket').register(socket);
 }
 //# sourceMappingURL=socketio.js.map
