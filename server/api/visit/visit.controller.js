@@ -97,16 +97,8 @@ function show(req, res) {
 // Creates a new Visit in the DB
 function create(req, res) {
   req.body.user = req.user._id;
-  var date = new Date();
-  if (req.body.time == '10-11am') {
-    req.body.time = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 10, 0, 0, 0);
-  } else if (req.body.time == '1-2pm') {
-    req.body.time = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 13, 0, 0, 0);
-  } else if (req.body.time == '4-5pm') {
-    req.body.time = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 16, 0, 0, 0);
-  } else return res.send(400, { message: 'Incorrect time' });
+  // else return res.send(400, {message:'Incorrect time'});
 
-  if (date > req.body.time) req.body.time.setDate(req.body.time.getDate() + 1);
 
   return _visit2.default.create(req.body).then(respondWithResult(res, 201)).catch(handleError(res));
 }
